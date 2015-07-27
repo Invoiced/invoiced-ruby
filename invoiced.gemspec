@@ -12,6 +12,7 @@ Gem::Specification.new do |s|
   s.email       = 'api@invoiced.com'
   s.files       = ["lib/invoiced.rb"]
   s.homepage    = 'https://developers.invoiced.com'
+  s.required_ruby_version = '>= 1.9.3'
 
   s.add_dependency('rest-client', '~> 1.8.0')
   s.add_dependency('json', '~> 1.8.3')
