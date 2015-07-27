@@ -124,7 +124,7 @@ module Invoiced
 				end
 				return mth.call(args[0])
 			else
-				return @values[name] if @values && @values.has_key?(name)
+				return @values[name] if @values.has_key?(name)
 			end
 
 			begin

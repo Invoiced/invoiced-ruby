@@ -26,22 +26,40 @@ module Invoiced
 	class Client
 		ApiBase = 'https://api.invoiced.com'
 
+		attr_reader :api_key
+
 	    def initialize(api_key)
 	      @api_key = api_key
 	    end
 
-	    def api_key
-	    	@api_key
+	    def Customer
+	    	Invoiced::Customer.new(self)
+	    end
+
+	    def Invoice
+	    	Invoiced::Invoice.new(self)
+	    end
+
+	    def Transaction
+	    	Invoiced::Transaction.new(self)
+	    end
+
+	    def Plan
+	    	Invoiced::Plan.new(self)
+	    end
+
+	    def Subscription
+	    	Invoiced::Subscription.new(self)
 	    end
 
 	    def request(method, endpoint, params={})
 	    	url = ApiBase + endpoint
 
 			case method.to_s.downcase.to_sym
-			# Convert params into query parameters
+			# These methods don't have a request body
 			when :get, :head, :delete
-				# url += "#{URI.parse(url).query ? '&' : '?'}#{Util.uri_encode(params)}" if params && params.any?
 				payload = nil
+			# Otherwise, encode request body to JSON
 			else
 				payload = params.to_json
 			end
@@ -68,34 +86,24 @@ module Invoiced
 		    	end
 		    end
 
-	    	{
-	    		:code => response.code,
-	    		:headers => response.headers,
-	    		:body => response.code != 204 ? JSON.parse(response.body) : nil
-	    	}
-	    end
-
-	    def Customer
-	    	Invoiced::Customer.new(self)
-	    end
-
-	    def Invoice
-	    	Invoiced::Invoice.new(self)
-	    end
-
-	    def Transaction
-	    	Invoiced::Transaction.new(self)
-	    end
-
-	    def Plan
-	    	Invoiced::Plan.new(self)
-	    end
-
-	    def Subscription
-	    	Invoiced::Subscription.new(self)
+		    parse(response)
 	    end
 
 	    private
+
+	    def parse(response)
+	    	unless response.code == 204
+	    		parsed_response = JSON.parse(response.body, :symbolize_names => true)
+	    	else
+	    		parsed_response = nil
+	    	end
+
+	    	{
+	    		:code => response.code,
+	    		:headers => response.headers,
+	    		:body => parsed_response
+	    	}
+	    end
 
 	    def rescue_api_error(response)
 		    begin

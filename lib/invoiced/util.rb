@@ -17,7 +17,7 @@ module Invoiced
 			end
 
 			def convert_to_object(_class, object)
-				_class.class.new(_class.client, object["id"], object)
+				_class.class.new(_class.client, object[:id], object)
 			end
 
 			private
