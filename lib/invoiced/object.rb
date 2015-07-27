@@ -1,14 +1,47 @@
 module Invoiced
 	class Object
-		def initialize(id=nil)
+		include Enumerable
+
+		attr_reader :client
+
+		 @@permanent_attributes = Set.new([:id])
+
+		def initialize(client, id=nil, values={})
+			@client = client
+			class_name = self.class.name.split('::').last
+			@endpoint = '/' + class_name.underscore.pluralize.downcase
+
 			@id = id
-			@values = Set.new
-			@unsaved = Set.new
+			@values = {}
+
+			if !id.nil?
+				@endpoint += "/#{id}"
+				@values = values.dup.merge({:id => id})
+				@unsaved = Set.new
+			end
 		end
+
+	    def retrieve(id, opts={})
+	    	if !id
+	    		raise ArgumentError.new("Missing ID.")
+	    	end
+
+	    	response = @client.request(:get, "#{@endpoint}/#{id}", opts)
+
+	    	self.class.new(@client, id, response[:body])
+	    end
+
+	    def load(opts={})
+	    end
 
 	    def to_s(*args)
 	    	JSON.pretty_generate(@values)
 	    end
+
+		def inspect
+			id_string = (!@id.nil?) ? " id=#{@id}" : ""
+			"#<#{self.class}:0x#{self.object_id.to_s(16)}#{id_string}> JSON: " + JSON.pretty_generate(@values)
+		end
 
 	    def [](k)
 	    	@values[k.to_sym]
@@ -44,5 +77,61 @@ module Invoiced
 	    def each(&blk)
 	    	@values.each(&blk)
 	    end
+
+		def metaclass
+			class << self; self; end
+		end
+
+		def remove_accessors(keys)
+			metaclass.instance_eval do
+				keys.each do |k|
+					next if @@permanent_attributes.include?(k)
+					k_eq = :"#{k}="
+					remove_method(k) if method_defined?(k)
+					remove_method(k_eq) if method_defined?(k_eq)
+				end
+			end
+		end
+
+		def add_accessors(keys)
+			metaclass.instance_eval do
+				keys.each do |k|
+					next if @@permanent_attributes.include?(k)
+					k_eq = :"#{k}="
+					define_method(k) { @values[k] }
+					define_method(k_eq) do |v|
+						if v == ""
+							raise ArgumentError.new(
+								"You cannot set #{k} to an empty string." \
+								"We interpret empty strings as nil in requests." \
+								"You may set #{self}.#{k} = nil to delete the property.")
+						end
+						@values[k] = v
+						@unsaved.add(k)
+					end
+				end
+			end
+		end
+
+		def method_missing(name, *args)
+			if name.to_s.end_with?('=')
+				attr = name.to_s[0...-1].to_sym
+				add_accessors([attr])
+				begin
+					mth = method(name)
+				rescue NameError
+					raise NoMethodError.new("Cannot set #{attr} on this object. HINT: you can't set: #{@@permanent_attributes.to_a.join(', ')}")
+				end
+				return mth.call(args[0])
+			else
+				return @values[name] if @values && @values.has_key?(name)
+			end
+
+			begin
+				super
+			rescue NoMethodError => e
+				raise
+			end
+		end
 	end
 end

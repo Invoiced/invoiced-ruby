@@ -1,5 +1,5 @@
 module Invoiced
-    class Customer < Object
+    class Subscription < Object
 		include Invoiced::Operations::List
 		include Invoiced::Operations::Create
 		include Invoiced::Operations::Update

@@ -10,6 +10,16 @@ module Invoiced
 	      			map { |k,v| "#{k}=#{url_encode(v)}" }.join('&')
 			end
 
+			def build_objects(_class, objects)
+    			objects.map {
+    				|object| convert_to_object(_class, object)
+				}
+			end
+
+			def convert_to_object(_class, object)
+				_class.class.new(_class.client, object["id"], object)
+			end
+
 			private
 
 			def url_encode(params)
