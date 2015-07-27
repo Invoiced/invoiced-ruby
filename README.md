@@ -38,7 +38,10 @@ Then, API calls can be made like this:
 ```ruby
 invoice = invoiced.Invoice.retrieve("{INVOICE_ID}")
 
-transaction = invoiced.Transaction.create(:invoice => invoice.id, :amount => invoice.balance, :method => "check")
+transaction = invoiced.Transaction.create(
+    :invoice => invoice.id,
+    :amount => invoice.balance,
+    :method => "check")
 ```
 
 ## Developing
