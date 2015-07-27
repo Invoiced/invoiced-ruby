@@ -36,8 +36,10 @@ invoiced = Invoiced::Client.new("{API_KEY}")
 
 Then, API calls can be made like this:
 ```ruby
+# retrieve invoice
 invoice = invoiced.Invoice.retrieve("{INVOICE_ID}")
 
+# mark as paid
 transaction = invoiced.Transaction.create(
     :invoice => invoice.id,
     :amount => invoice.balance,
