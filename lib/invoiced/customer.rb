@@ -1,8 +1,8 @@
 module Invoiced
-    class Invoice < Object
+    class Customer < Object
     	def initialize(client)
     		@client = client
-    		@endpoint = '/invoices'
+    		@endpoint = '/customers'
     	end
 
 	    def list(opts={})

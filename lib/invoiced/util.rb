@@ -1,0 +1,55 @@
+module Invoiced
+	class Util
+		class << self
+		    def auth_header(api_key)
+		    	"Basic " + Base64.strict_encode64(api_key + ":")
+		    end
+
+			def uri_encode(params)
+				flatten_params(params).
+	      			map { |k,v| "#{k}=#{url_encode(v)}" }.join('&')
+			end
+
+			private
+
+			def url_encode(params)
+				if params.is_a?(Hash)
+					params.map {
+						|k,v| "#{k}=#{uri_encode(v)}"
+					}.join('&')
+				else
+					URI.escape(params.to_s, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
+				end
+			end
+
+			def flatten_params(params, parent_key=nil)
+				result = []
+				params.each do |key, value|
+					calculated_key = parent_key ? "#{parent_key}[#{url_encode(key)}]" : url_encode(key)
+					if value.is_a?(Hash)
+						result += flatten_params(value, calculated_key)
+					elsif value.is_a?(Array)
+						result += flatten_params_array(value, calculated_key)
+					else
+						result << [calculated_key, value]
+					end
+				end
+				result
+			end
+
+			def flatten_params_array(value, calculated_key)
+				result = []
+				value.each do |elem|
+					if elem.is_a?(Hash)
+						result += flatten_params(elem, "#{calculated_key}[]")
+					elsif elem.is_a?(Array)
+						result += flatten_params_array(elem, calculated_key)
+					else
+						result << ["#{calculated_key}[]", elem]
+					end
+				end
+				result
+			end
+		end
+	end
+end
