@@ -53,11 +53,13 @@ module Invoiced
 	    end
 
 	    def request(method, endpoint, params={})
-	    	url = ApiBase + endpoint
+	    	url = ApiBase + endpoint + "?envelope=0"
 
 			case method.to_s.downcase.to_sym
 			# These methods don't have a request body
 			when :get, :head, :delete
+				# Make params into GET parameters
+				url += "#{URI.parse(url).query ? '&' : '?'}#{Util.uri_encode(params)}" if params && params.any?
 				payload = nil
 			# Otherwise, encode request body to JSON
 			else
@@ -74,7 +76,7 @@ module Invoiced
 		    			:user_agent => "Invoiced Ruby/#{Invoiced::VERSION}",
 		    			# pass in query parameters here due
 		    			# to an eccentricity in the rest-client gem
-		    			:params => params.merge({:envelope => '0'})
+		    			# :params => params.merge({:envelope => '0'})
 		    		},
 		    		payload: payload
 		    	)
