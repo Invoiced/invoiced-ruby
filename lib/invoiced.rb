@@ -115,7 +115,7 @@ module Invoiced
 			end
 
 			case response.code
-			when 400, 404
+			when 400, 403, 404
 				raise invalid_request_error(error, response)
 			when 401
 				raise authentication_error(error, response)
@@ -141,7 +141,7 @@ module Invoiced
 	    end
 
 	    def general_api_error(code, body)
-	    	raise ApiError.new("API Error #{code} - #{body}")
+	    	raise ApiError.new("API Error #{code} - #{body}", code)
 	    end
 	end
 end
