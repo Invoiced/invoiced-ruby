@@ -12,5 +12,11 @@ module Invoiced
 			email = Email.new(@client)
 			Util.build_objects(email, response[:body])
 		end
+
+		def balance
+			response = @client.request(:get, "#{@endpoint}/balance")
+
+			response[:body]
+		end
 	end
 end

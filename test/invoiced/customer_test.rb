@@ -25,6 +25,11 @@ module Invoiced
       emails = customer.send_statement
     end
 
+    should "retrieve a customer's balance" do
+      customer = Customer.new(@client, 1234)
+      balance = customer.balance
+    end
+
     should "delete a customer" do
       customer = Customer.new(@client, 1234)
       assert_true(customer.delete)
