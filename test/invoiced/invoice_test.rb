@@ -25,6 +25,11 @@ module Invoiced
       emails = invoice.send
     end
 
+    should "pay an invoice" do
+      invoice = Invoice.new(@client, 1234)
+      assert_true(invoice.pay)
+    end
+
     should "delete an invoice" do
       invoie = Invoice.new(@client, 1234)
       assert_true(invoice.delete)

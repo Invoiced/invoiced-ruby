@@ -14,5 +14,14 @@ module Invoiced
 
 			return emails
 		end
+
+		def pay
+			response = @client.request(:post, "#{@endpoint}/pay")
+
+			# update the local values with the response
+			@values = response[:body].dup.merge({:id => self.id})
+
+			return response[:code] == 200
+		end
 	end
 end
