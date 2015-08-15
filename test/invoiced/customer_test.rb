@@ -30,6 +30,10 @@ module Invoiced
       balance = customer.balance
     end
 
+    should "list all of the customer's subscriptions" do
+      @client.Customer.subscriptions
+    end
+
     should "delete a customer" do
       customer = Customer.new(@client, 1234)
       assert_true(customer.delete)

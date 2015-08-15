@@ -18,5 +18,18 @@ module Invoiced
 
 			response[:body]
 		end
+
+		def subscriptions(opts={})
+			response = @client.request(:get, "#{@endpoint}/subscriptions", opts)
+
+			# build objects
+			subscription = Subscription.new(@client)
+			subscriptions = Util.build_objects(subscription, response[:body])
+
+			# store the metadata from the list operation
+			metadata = Invoiced::List.new(response[:headers][:link], response[:headers][:x_total_count])
+
+			return subscriptions, metadata
+		end
 	end
 end
