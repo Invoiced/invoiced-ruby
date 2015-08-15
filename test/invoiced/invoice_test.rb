@@ -22,7 +22,7 @@ module Invoiced
 
     should "send an invoice" do
       invoice = Invoice.new(@client, 1234)
-      assert_true(invoice.send)
+      emails = invoice.send
     end
 
     should "delete an invoice" do

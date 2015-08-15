@@ -20,6 +20,11 @@ module Invoiced
       assert_true(customer.save)
     end
 
+    should "send an account statement" do
+      customer = Customer.new(@client, 1234)
+      emails = customer.send_statement
+    end
+
     should "delete a customer" do
       customer = Customer.new(@client, 1234)
       assert_true(customer.delete)
