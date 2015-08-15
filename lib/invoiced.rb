@@ -17,6 +17,7 @@ require 'invoiced/operations/update'
 
 require 'invoiced/object'
 require 'invoiced/customer'
+require 'invoiced/email'
 require 'invoiced/invoice'
 require 'invoiced/transaction'
 require 'invoiced/plan'
@@ -137,7 +138,7 @@ module Invoiced
 	    end
 
 	    def api_error(error, response)
-	    	raise ApiError.new("Invoiced API Error #{code} - #{body}", response.code, error)
+	    	raise ApiError.new(error["message"], response.code, error)
 	    end
 
 	    def general_api_error(code, body)
