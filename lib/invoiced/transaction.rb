@@ -10,9 +10,13 @@ module Invoiced
 
 			# build email objects
 			email = Email.new(@client)
-			emails = Util.build_objects(email, response[:body])
+			Util.build_objects(email, response[:body])
+		end
 
-			return emails
+		def refund(opts={})
+			response = @client.request(:post, "#{@endpoint}/refunds", opts)
+
+			Util.convert_to_object(self, response[:body])
 		end
 	end
 end

@@ -10,9 +10,7 @@ module Invoiced
 
 			# build email objects
 			email = Email.new(@client)
-			emails = Util.build_objects(email, response[:body])
-
-			return emails
+			Util.build_objects(email, response[:body])
 		end
 
 		def pay

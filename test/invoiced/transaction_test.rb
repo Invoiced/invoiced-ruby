@@ -25,6 +25,11 @@ module Invoiced
       emails = transaction.send
     end
 
+    should "refund a transaction" do
+      transaction = Transaction.new(@client, 1234)
+      refund = transaction.refund({:amount => 800})
+    end
+
     should "delete a transaction" do
       transaction = Transaction.new(@client, 1234)
       assert_true(transaction.delete)
