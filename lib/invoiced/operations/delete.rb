@@ -4,7 +4,9 @@ module Invoiced
 			def delete
     			response = @client.request(:delete, @endpoint)
 
-    			@values = {:id => @id}
+    			if response[:code] == 204
+    				@values = {:id => @id}
+    			end
 
     			return response[:code] == 204
     		end
