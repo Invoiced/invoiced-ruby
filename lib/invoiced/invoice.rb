@@ -18,6 +18,7 @@ module Invoiced
 
 			# update the local values with the response
 			@values = response[:body].dup.merge({:id => self.id})
+			@unsaved = Set.new
 
 			return response[:code] == 200
 		end
