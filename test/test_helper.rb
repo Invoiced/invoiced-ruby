@@ -2,6 +2,9 @@ require 'invoiced'
 require 'test/unit'
 require 'mocha/setup'
 require 'shoulda'
+require 'coveralls'
+
+Coveralls.wear!
 
 class Test::Unit::TestCase
   include Mocha
