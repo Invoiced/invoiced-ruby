@@ -1,10 +1,19 @@
+require 'simplecov'
+require 'simplecov-console'
+require 'coveralls'
+
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+  SimpleCov::Formatter::Console,
+  Coveralls::SimpleCov::Formatter
+]
+SimpleCov.start do
+  add_filter 'test/'
+end
+
 require 'invoiced'
 require 'test/unit'
 require 'mocha/setup'
 require 'shoulda'
-require 'coveralls'
-
-Coveralls.wear!
 
 class Test::Unit::TestCase
   include Mocha
