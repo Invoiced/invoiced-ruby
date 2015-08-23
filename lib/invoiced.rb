@@ -6,6 +6,7 @@ require 'active_support/inflector'
 require 'invoiced/version'
 require 'invoiced/util'
 require 'invoiced/error/error_base'
+require 'invoiced/error/api_connection_error'
 require 'invoiced/error/api_error'
 require 'invoiced/error/authentication_error'
 require 'invoiced/error/invalid_request'
@@ -109,7 +110,7 @@ module Invoiced
 	    end
 
 	    def rescue_rest_client_error(error)
-	    	raise ApiError.new("There was an error connecting to Invoiced.")
+	    	raise ApiConnectionError.new("There was an error connecting to Invoiced.")
 	    end
 
 	    def authentication_error(error, response)

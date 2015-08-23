@@ -91,7 +91,7 @@ module Invoiced
 
       client = Invoiced::Client.new('test')
 
-      assert_raise Invoiced::ApiError do
+      assert_raise Invoiced::ApiConnectionError do
         client.request("POST", "/invoices")
       end
     end
