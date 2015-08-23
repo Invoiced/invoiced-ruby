@@ -3,6 +3,9 @@ invoiced-ruby
 
 This repository contains the Ruby client library for the [Invoiced](https://invoiced.com) API.
 
+[![Build Status](https://travis-ci.org/Invoiced/invoiced-ruby.svg?branch=master)](https://travis-ci.org/Invoiced/invoiced-ruby)
+[![Coverage Status](https://coveralls.io/repos/Invoiced/invoiced-ruby/badge.svg?branch=master&service=github)](https://coveralls.io/github/Invoiced/invoiced-ruby?branch=master)
+
 ## Installing
 
 The Invoiced gem can be installed liked this:
