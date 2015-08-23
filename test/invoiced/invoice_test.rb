@@ -17,12 +17,6 @@ module Invoiced
       assert_equal('INV-0001', invoice.number)
     end
 
-    should "throw exception when retrieving with no id" do
-      assert_raise ArgumentError do
-        @client.Invoice.retrieve(nil)
-      end
-    end
-
     should "retrieve a invoice" do
       mockResponse = mock('RestClient::Response')
       mockResponse.stubs(:code).returns(200)

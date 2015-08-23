@@ -17,12 +17,6 @@ module Invoiced
       assert_equal('Pied Piper', customer.name)
     end
 
-    should "throw exception when retrieving with no id" do
-      assert_raise ArgumentError do
-        @client.Customer.retrieve(nil)
-      end
-    end
-
     should "retrieve a customer" do
       mockResponse = mock('RestClient::Response')
       mockResponse.stubs(:code).returns(200)

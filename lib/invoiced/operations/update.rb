@@ -15,8 +15,7 @@ module Invoiced
     				response = @client.request(:patch, @endpoint, update)
 
     				# update the local values with the response
-    				@values = response[:body].dup.merge({:id => self.id})
-    				@unsaved = Set.new
+    				refresh_from(response[:body].dup.merge({:id => self.id}))
 
     				return response[:code] == 200
 		        end

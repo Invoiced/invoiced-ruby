@@ -43,6 +43,26 @@ module Invoiced
 			"#<#{self.class}:0x#{self.object_id.to_s(16)}#{id_string}> JSON: " + JSON.pretty_generate(@values)
 		end
 
+		def refresh_from(values)
+			removed = Set.new(@values.keys - values.keys)
+			added = Set.new(values.keys - @values.keys)
+
+			instance_eval do
+				remove_accessors(removed)
+				add_accessors(added)
+			end
+			removed.each do |k|
+				@values.delete(k)
+				@unsaved.delete(k)
+			end
+			values.each do |k, v|
+				@values[k] = v
+				@unsaved.delete(k)
+			end
+
+			return self
+		end
+
 	    def [](k)
 	    	@values[k.to_sym]
 	    end
@@ -61,10 +81,6 @@ module Invoiced
 
 	    def to_json(*a)
 	    	JSON.generate(@values)
-	    end
-
-	    def as_json(*a)
-	    	@values.as_json(*a)
 	    end
 
 	    def to_hash

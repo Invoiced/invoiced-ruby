@@ -5,7 +5,7 @@ module Invoiced
     			response = @client.request(:delete, @endpoint)
 
     			if response[:code] == 204
-    				@values = {:id => @id}
+                    refresh_from({:id => @id})
     			end
 
     			return response[:code] == 204
