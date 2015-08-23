@@ -17,7 +17,7 @@ module Invoiced
       assert_equal('INV-0001', invoice.number)
     end
 
-    should "retrieve a invoice" do
+    should "retrieve an invoice" do
       mockResponse = mock('RestClient::Response')
       mockResponse.stubs(:code).returns(200)
       mockResponse.stubs(:body).returns('{"id":123,"number":"INV-0001"}')
@@ -37,7 +37,7 @@ module Invoiced
       assert_false(invoice.save)
     end
 
-    should "update a invoice" do
+    should "update an invoice" do
       mockResponse = mock('RestClient::Response')
       mockResponse.stubs(:code).returns(200)
       mockResponse.stubs(:body).returns('{"id":123,"closed":true}')
@@ -70,7 +70,7 @@ module Invoiced
       assert_equal(15, metadata.total_count)
     end
 
-    should "delete a invoice" do
+    should "delete an invoice" do
       mockResponse = mock('RestClient::Response')
       mockResponse.stubs(:code).returns(204)
       mockResponse.stubs(:body).returns('')
