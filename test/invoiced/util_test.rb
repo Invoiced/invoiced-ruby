@@ -10,11 +10,19 @@ module Invoiced
         params = {
           "test" => "property",
           "filter" => {
-            "levels" => "work"
-          }
+            "levels" => "work",
+            "nesting" => {
+              "works" => true
+            }
+          },
+          "array" => [
+              "should",
+              {"also" => true},
+              ["work"]
+          ]
         }
 
-        assert_equal("test=property&filter[levels]=work", Util.uri_encode(params))
+        assert_equal("test=property&filter[levels]=work&filter[nesting][works]=true&array[]=should&array[][also]=true&array[]=work", Util.uri_encode(params))
     end
 
     should "create a Customer object" do

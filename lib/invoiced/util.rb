@@ -23,13 +23,7 @@ module Invoiced
 			private
 
 			def url_encode(params)
-				if params.is_a?(Hash)
-					params.map {
-						|k,v| "#{k}=#{uri_encode(v)}"
-					}.join('&')
-				else
-					URI.escape(params.to_s, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
-				end
+				URI.escape(params.to_s, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
 			end
 
 			def flatten_params(params, parent_key=nil)
