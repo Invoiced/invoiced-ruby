@@ -53,8 +53,7 @@ module Invoiced
 
     should "perform a post request" do
       mockResponse = mock('RestClient::Response')
-      mockResponse.stubs(:code).returns(200)
-      mockResponse.stubs(:body).returns('{"test":true}')
+      mockResponse.stubs(:code).returns(204)
       mockResponse.stubs(:headers).returns(:Header => "test")
 
       # not used
@@ -78,25 +77,21 @@ module Invoiced
       response = client.request("POST", "/invoices", params)
 
       expectedResponse = {
-        :code => 200,
+        :code => 204,
         :headers => {
           :Header => "test"
         },
-        :body => {
-          :test => true
-        }
+        :body => nil
       }
       assert_equal(expectedResponse, response)
     end
 
     should "handle a request exception" do
-      ex = mock('RestClient::Exception')
-      ex.stubs(:response).returns(false)
-      RestClient::Request.any_instance.expects(:execute).raises(ex)
+      RestClient::Request.any_instance.expects(:execute).raises(RestClient::Exception.new)
 
       client = Invoiced::Client.new('test')
 
-      assert_raise "Invoiced::ApiError" do
+      assert_raise Invoiced::ApiError do
         client.request("POST", "/invoices")
       end
     end
@@ -106,13 +101,14 @@ module Invoiced
       mockResponse.stubs(:code).returns(400)
       mockResponse.stubs(:body).returns('{"error":true}')
 
-      ex = mock('RestClient::Exception')
-      ex.stubs(:response).returns(false)
+      ex = RestClient::ExceptionWithResponse.new
+      ex.response = mockResponse
+
       RestClient::Request.any_instance.expects(:execute).raises(ex)
 
       client = Invoiced::Client.new('test')
 
-      assert_raise "Invoiced::InvalidRequestError" do
+      assert_raise Invoiced::InvalidRequestError do
         client.request("POST", "/invoices")
       end
     end
@@ -122,13 +118,14 @@ module Invoiced
       mockResponse.stubs(:code).returns(401)
       mockResponse.stubs(:body).returns('{"error":true}')
 
-      ex = mock('RestClient::Exception')
-      ex.stubs(:response).returns(mockResponse)
+      ex = RestClient::ExceptionWithResponse.new
+      ex.response = mockResponse
+
       RestClient::Request.any_instance.expects(:execute).raises(ex)
 
       client = Invoiced::Client.new('test')
 
-      assert_raise "Invoiced::InvalidRequestError" do
+      assert_raise Invoiced::AuthenticationError do
         client.request("POST", "/invoices")
       end
     end
@@ -138,13 +135,14 @@ module Invoiced
       mockResponse.stubs(:code).returns(500)
       mockResponse.stubs(:body).returns('{"error":true}')
 
-      ex = mock('RestClient::Exception')
-      ex.stubs(:response).returns(mockResponse)
+      ex = RestClient::ExceptionWithResponse.new
+      ex.response = mockResponse
+
       RestClient::Request.any_instance.expects(:execute).raises(ex)
 
       client = Invoiced::Client.new('test')
 
-      assert_raise "Invoiced::ApiError" do
+      assert_raise Invoiced::ApiError do
         client.request("POST", "/invoices")
       end
     end
@@ -154,13 +152,14 @@ module Invoiced
       mockResponse.stubs(:code).returns(500)
       mockResponse.stubs(:body).returns('not valid json')
 
-      ex = mock('RestClient::Exception')
-      ex.stubs(:response).returns(mockResponse)
+      ex = RestClient::ExceptionWithResponse.new
+      ex.response = mockResponse
+
       RestClient::Request.any_instance.expects(:execute).raises(ex)
 
       client = Invoiced::Client.new('test')
 
-      assert_raise "Invoiced::ApiError" do
+      assert_raise Invoiced::ApiError do
         client.request("POST", "/invoices")
       end
     end

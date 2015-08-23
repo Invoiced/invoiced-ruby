@@ -113,19 +113,19 @@ module Invoiced
 	    end
 
 	    def authentication_error(error, response)
-	    	raise AuthenticationError.new(error["message"], response.code, error)
+	    	AuthenticationError.new(error["message"], response.code, error)
 	    end
 
 	    def invalid_request_error(error, response)
-	    	raise InvalidRequestError.new(error["message"], response.code, error)
+	    	InvalidRequestError.new(error["message"], response.code, error)
 	    end
 
 	    def api_error(error, response)
-	    	raise ApiError.new(error["message"], response.code, error)
+	    	ApiError.new(error["message"], response.code, error)
 	    end
 
 	    def general_api_error(code, body)
-	    	raise ApiError.new("API Error #{code} - #{body}", code)
+	    	ApiError.new("API Error #{code} - #{body}", code)
 	    end
 	end
 end
