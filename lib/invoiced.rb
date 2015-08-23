@@ -28,29 +28,15 @@ module Invoiced
 		ApiBase = 'https://api.invoiced.com'
 
 		attr_reader :api_key
+		attr_reader :Customer, :Invoice, :Transaction, :Plan, :Subscription
 
 	    def initialize(api_key)
 	      @api_key = api_key
-	    end
-
-	    def Customer
-	    	Invoiced::Customer.new(self)
-	    end
-
-	    def Invoice
-	    	Invoiced::Invoice.new(self)
-	    end
-
-	    def Transaction
-	    	Invoiced::Transaction.new(self)
-	    end
-
-	    def Plan
-	    	Invoiced::Plan.new(self)
-	    end
-
-	    def Subscription
-	    	Invoiced::Subscription.new(self)
+	      @Customer = Invoiced::Customer.new(self)
+	      @Invoice = Invoiced::Invoice.new(self)
+	      @Transaction = Invoiced::Transaction.new(self)
+	      @Plan = Invoiced::Plan.new(self)
+	      @Subscription = Invoiced::Subscription.new(self)
 	    end
 
 	    def request(method, endpoint, params={})
@@ -69,17 +55,14 @@ module Invoiced
 
 			begin
 		    	response = RestClient::Request.execute(
-		    		method: method,
-		    		url: url,
-		    		headers: {
+		    		:method => method,
+		    		:url => url,
+		    		:headers => {
 		    			:authorization => Util.auth_header(@api_key),
 		    			:content_type => "application/json",
-		    			:user_agent => "Invoiced Ruby/#{Invoiced::VERSION}",
-		    			# pass in query parameters here due
-		    			# to an eccentricity in the rest-client gem
-		    			# :params => params.merge({:envelope => '0'})
+		    			:user_agent => "Invoiced Ruby/#{Invoiced::VERSION}"
 		    		},
-		    		payload: payload
+		    		:payload => payload
 		    	)
 		    rescue RestClient::Exception => e
 		    	if e.response
