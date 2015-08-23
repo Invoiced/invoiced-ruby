@@ -16,8 +16,8 @@ module Invoiced
 
 			if !id.nil?
 				@endpoint += "/#{id}"
-				@values = values.dup.merge({:id => id})
 				@unsaved = Set.new
+				refresh_from(values.dup.merge({:id => id}))
 			end
 		end
 
