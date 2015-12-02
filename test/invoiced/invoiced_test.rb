@@ -19,7 +19,7 @@ module Invoiced
       # not used
       expectedParameters = {
         :method => "GET",
-        :url => "https://api.invoiced.com/invoices?envelope=0&test=property&filter[levels]=work",
+        :url => "https://api.invoiced.com/invoices?test=property&filter[levels]=work",
         :headers => {
           :authorization => "Basic dGVzdDo=",
           :content_type => "application/json",
@@ -59,7 +59,7 @@ module Invoiced
       # not used
       expectedParameters = {
         :method => "POST",
-        :url => "https://api.invoiced.com/invoices?envelope=0&test=property&filter[levels]=work",
+        :url => "https://api.invoiced.com/invoices?test=property&filter[levels]=work",
         :headers => {
           :authorization => "Basic dGVzdDo=",
           :content_type => "application/json",

@@ -41,7 +41,7 @@ module Invoiced
 	    end
 
 	    def request(method, endpoint, params={})
-	    	url = ApiBase + endpoint + "?envelope=0"
+	    	url = ApiBase + endpoint
 
 			case method.to_s.downcase.to_sym
 			# These methods don't have a request body
