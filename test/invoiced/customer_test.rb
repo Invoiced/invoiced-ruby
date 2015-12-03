@@ -103,7 +103,7 @@ module Invoiced
       mockResponse = mock('RestClient::Response')
       mockResponse.stubs(:code).returns(200)
       mockResponse.stubs(:body).returns('{"total_outstanding":1000,"available_credits":0,"past_due":true}')
-      mockResponse.stubs(:headers).returns(:x_total_count => 10, :link => '<https://api.invoiced.com/customers/123/subscriptions?per_page=25&page=1>; rel="self", <https://api.invoiced.com/customers/123/subscriptions?per_page=25&page=1>; rel="first", <https://api.invoiced.com/customers/123/subscriptions?per_page=25&page=1>; rel="last"')
+      mockResponse.stubs(:headers).returns({})
 
       RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
 
@@ -127,7 +127,8 @@ module Invoiced
 
       RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
 
-      subscriptions, metadata = @client.Customer.subscriptions
+      customer = Customer.new(@client, 123)
+      subscriptions, metadata = customer.subscriptions
 
       assert_instance_of(Array, subscriptions)
       assert_equal(1, subscriptions.length)
