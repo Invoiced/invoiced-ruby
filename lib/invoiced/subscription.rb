@@ -4,5 +4,9 @@ module Invoiced
 		include Invoiced::Operations::Create
 		include Invoiced::Operations::Update
 		include Invoiced::Operations::Delete
+
+		def cancel
+			delete
+		end
 	end
 end

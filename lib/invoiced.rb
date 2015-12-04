@@ -21,7 +21,6 @@ require 'invoiced/customer'
 require 'invoiced/email'
 require 'invoiced/invoice'
 require 'invoiced/transaction'
-require 'invoiced/plan'
 require 'invoiced/subscription'
 
 module Invoiced
@@ -29,14 +28,13 @@ module Invoiced
 		ApiBase = 'https://api.invoiced.com'
 
 		attr_reader :api_key
-		attr_reader :Customer, :Invoice, :Transaction, :Plan, :Subscription
+		attr_reader :Customer, :Invoice, :Transaction, :Subscription
 
 	    def initialize(api_key)
 	      @api_key = api_key
 	      @Customer = Invoiced::Customer.new(self)
 	      @Invoice = Invoiced::Invoice.new(self)
 	      @Transaction = Invoiced::Transaction.new(self)
-	      @Plan = Invoiced::Plan.new(self)
 	      @Subscription = Invoiced::Subscription.new(self)
 	    end
 
