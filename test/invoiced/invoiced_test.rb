@@ -8,7 +8,14 @@ module Invoiced
   	should "create new client" do
   		client = Invoiced::Client.new('api_key')
   		assert_equal('api_key', client.api_key)
+      assert_equal('https://api.invoiced.com', client.api_url)
   	end
+
+    should "create new sandbox client" do
+      client = Invoiced::Client.new('api_key', true)
+      assert_equal('api_key', client.api_key)
+      assert_equal('https://api.sandbox.invoiced.com', client.api_url)
+    end
 
   	should "perform a get request" do
       mockResponse = mock('RestClient::Response')

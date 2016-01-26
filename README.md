@@ -49,6 +49,14 @@ transaction = invoiced.Transaction.create(
     :method => "check")
 ```
 
+If you want to use the sandbox API instead then you must set the second argument on the client to `true` like this:
+
+```ruby
+require 'invoiced'
+
+invoiced = Invoiced::Client.new("{API_KEY}", true)
+```
+
 ## Developing
 
 The gem can be built with:

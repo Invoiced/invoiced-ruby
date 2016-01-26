@@ -26,12 +26,15 @@ require 'invoiced/subscription'
 module Invoiced
 	class Client
 		ApiBase = 'https://api.invoiced.com'
+		ApiBaseSandbox = 'https://api.sandbox.invoiced.com'
 
-		attr_reader :api_key
+		attr_reader :api_key, :api_url, :sandbox
 		attr_reader :Customer, :Invoice, :Transaction, :Subscription
 
-	    def initialize(api_key)
+	    def initialize(api_key, sandbox=false)
 	      @api_key = api_key
+	      @sandbox = sandbox
+	      @api_url = sandbox ? ApiBaseSandbox : ApiBase
 	      @Customer = Invoiced::Customer.new(self)
 	      @Invoice = Invoiced::Invoice.new(self)
 	      @Transaction = Invoiced::Transaction.new(self)
@@ -39,7 +42,7 @@ module Invoiced
 	    end
 
 	    def request(method, endpoint, params={})
-	    	url = ApiBase + endpoint
+	    	url = @api_url + endpoint
 
 			case method.to_s.downcase.to_sym
 			# These methods don't have a request body
