@@ -188,5 +188,20 @@ module Invoiced
       assert_equal(123, line_item.id)
       assert_equal(500, line_item.unit_cost)
     end
+
+    should "create an invoice" do
+      mockResponse = mock('RestClient::Response')
+      mockResponse.stubs(:code).returns(201)
+      mockResponse.stubs(:body).returns('{"id":4567,"total":100}')
+      mockResponse.stubs(:headers).returns({})
+
+      RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
+
+      customer = Customer.new(@client, 123)
+      invoice = customer.invoice
+
+      assert_instance_of(Invoiced::Invoice, invoice)
+      assert_equal(4567, invoice.id)
+    end
   end
 end

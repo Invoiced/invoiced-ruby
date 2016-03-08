@@ -35,5 +35,13 @@ module Invoiced
 		def line_items(opts={})
 			LineItem.new(@client, nil, {}, self)
 		end
+
+		def invoice(opts={})
+			response = @client.request(:post, "#{@endpoint}/invoices", opts)
+
+			# build invoice object
+			invoice = Invoice.new(@client)
+			Util.convert_to_object(invoice, response[:body])
+		end
 	end
 end
