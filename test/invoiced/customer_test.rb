@@ -137,5 +137,56 @@ module Invoiced
       assert_instance_of(Invoiced::List, metadata)
       assert_equal(10, metadata.total_count)
     end
+
+    should "create a pending line item" do
+      mockResponse = mock('RestClient::Response')
+      mockResponse.stubs(:code).returns(201)
+      mockResponse.stubs(:body).returns('{"id":123,"unit_cost":500}')
+      mockResponse.stubs(:headers).returns({})
+
+      RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
+
+      customer = Customer.new(@client, 123)
+      line_item = customer.line_items.create({:unit_cost => 500})
+
+      assert_instance_of(Invoiced::LineItem, line_item)
+      assert_equal(123, line_item.id)
+      assert_equal(500, line_item.unit_cost)
+    end
+
+    should "list all of the customer's pending line item" do
+      mockResponse = mock('RestClient::Response')
+      mockResponse.stubs(:code).returns(200)
+      mockResponse.stubs(:body).returns('[{"id":123,"unit_cost":500}]')
+      mockResponse.stubs(:headers).returns(:x_total_count => 10, :link => '<https://api.invoiced.com/customers/123/line_items?per_page=25&page=1>; rel="self", <https://api.invoiced.com/customers/123/line_items?per_page=25&page=1>; rel="first", <https://api.invoiced.com/customers/123/line_items?per_page=25&page=1>; rel="last"')
+
+      RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
+
+      customer = Customer.new(@client, 123)
+      line_items, metadata = customer.line_items.list
+
+      assert_instance_of(Array, line_items)
+      assert_equal(1, line_items.length)
+      assert_equal(123, line_items[0].id)
+
+      assert_instance_of(Invoiced::List, metadata)
+      assert_equal(10, metadata.total_count)
+    end
+
+    should "retrieve a pending line item" do
+      mockResponse = mock('RestClient::Response')
+      mockResponse.stubs(:code).returns(200)
+      mockResponse.stubs(:body).returns('{"id":123,"unit_cost":500}')
+      mockResponse.stubs(:headers).returns({})
+
+      RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
+
+      customer = Customer.new(@client, 123)
+      line_item = customer.line_items.retrieve(123)
+
+      assert_instance_of(Invoiced::LineItem, line_item)
+      assert_equal(123, line_item.id)
+      assert_equal(500, line_item.unit_cost)
+    end
   end
 end

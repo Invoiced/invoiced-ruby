@@ -20,6 +20,7 @@ require 'invoiced/object'
 require 'invoiced/customer'
 require 'invoiced/email'
 require 'invoiced/invoice'
+require 'invoiced/line_item'
 require 'invoiced/transaction'
 require 'invoiced/subscription'
 

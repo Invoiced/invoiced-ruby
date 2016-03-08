@@ -31,5 +31,9 @@ module Invoiced
 
 			return subscriptions, metadata
 		end
+
+		def line_items(opts={})
+			LineItem.new(@client, nil, {}, self)
+		end
 	end
 end
