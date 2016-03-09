@@ -2,6 +2,11 @@ require File.expand_path('../../test_helper', __FILE__)
 
 module Invoiced
   class LineItemTest < Test::Unit::TestCase
+    should "return the api endpoint" do
+      line = LineItem.new(@client, 123)
+      assert_equal('/line_items/123', line.endpoint())
+    end
+
     should "create a line item" do
       mockResponse = mock('RestClient::Response')
       mockResponse.stubs(:code).returns(201)
@@ -10,8 +15,7 @@ module Invoiced
 
       RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
 
-      customer = Customer.new(@client, 123)
-      line = LineItem.new(@client, nil, {}, customer)
+      line = LineItem.new(@client)
       line_item = line.create({:unit_cost => 500})
 
       assert_instance_of(Invoiced::LineItem, line_item)
@@ -22,13 +26,12 @@ module Invoiced
     should "retrieve a line item" do
       mockResponse = mock('RestClient::Response')
       mockResponse.stubs(:code).returns(200)
-      mockResponse.stubs(:body).returns('{"id":"123","unit_cost":500}')
+      mockResponse.stubs(:body).returns('{"id":123,"unit_cost":500}')
       mockResponse.stubs(:headers).returns({})
 
       RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
 
-      customer = Customer.new(@client, 123)
-      line = LineItem.new(@client, nil, {}, customer)
+      line = LineItem.new(@client)
       line_item = line.retrieve(123)
 
       assert_instance_of(Invoiced::LineItem, line_item)
@@ -37,8 +40,7 @@ module Invoiced
     end
 
     should "not update a line item when no params" do
-      customer = Customer.new(@client, 123)
-      line_item = LineItem.new(@client, 123, {}, customer)
+      line_item = LineItem.new(@client, 123)
       assert_false(line_item.save)
     end
 
@@ -50,8 +52,7 @@ module Invoiced
 
       RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
 
-      customer = Customer.new(@client, 123)
-      line_item = LineItem.new(@client, 123, {}, customer)
+      line_item = LineItem.new(@client, 123)
       line_item.unit_cost = 400
       assert_true(line_item.save)
 
@@ -66,8 +67,7 @@ module Invoiced
 
       RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
 
-      customer = Customer.new(@client, 123)
-      line_item = LineItem.new(@client, nil, {}, customer)
+      line_item = LineItem.new(@client)
       line_items, metadata = line_item.list
 
       assert_instance_of(Array, line_items)
@@ -86,8 +86,7 @@ module Invoiced
 
       RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
 
-      customer = Customer.new(@client, 123)
-      line_item = LineItem.new(@client, 123, {}, customer)
+      line_item = LineItem.new(@client, 123)
       assert_true(line_item.delete)
     end
   end

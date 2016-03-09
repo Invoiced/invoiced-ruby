@@ -18,6 +18,15 @@ module Invoiced
   		end
   	end
 
+    should "return the api endpoint" do
+      object = Object.new(@client, 123)
+      assert_equal('/objects/123', object.endpoint())
+
+      object.set_endpoint_base('/blah')
+      assert_equal('/blah', object.endpoint_base())
+      assert_equal('/blah/objects/123', object.endpoint())
+    end
+
     should "throw exception when retrieving with no id" do
       assert_raise ArgumentError do
   		client = Client.new "test"

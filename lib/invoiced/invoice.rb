@@ -6,7 +6,7 @@ module Invoiced
 		include Invoiced::Operations::Delete
 
 		def send(opts={})
-			response = @client.request(:post, "#{@endpoint}/emails", opts)
+			response = @client.request(:post, "#{self.endpoint()}/emails", opts)
 
 			# build email objects
 			email = Email.new(@client)
@@ -14,7 +14,7 @@ module Invoiced
 		end
 
 		def pay
-			response = @client.request(:post, "#{@endpoint}/pay")
+			response = @client.request(:post, "#{self.endpoint()}/pay")
 
 			# update the local values with the response
 			refresh_from(response[:body].dup.merge({:id => self.id}))

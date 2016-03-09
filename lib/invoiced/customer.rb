@@ -6,7 +6,7 @@ module Invoiced
 		include Invoiced::Operations::Delete
 
 		def send_statement(opts={})
-			response = @client.request(:post, "#{@endpoint}/emails", opts)
+			response = @client.request(:post, "#{self.endpoint()}/emails", opts)
 
 			# build email objects
 			email = Email.new(@client)
@@ -14,13 +14,13 @@ module Invoiced
 		end
 
 		def balance
-			response = @client.request(:get, "#{@endpoint}/balance")
+			response = @client.request(:get, "#{self.endpoint()}/balance")
 
 			response[:body]
 		end
 
 		def subscriptions(opts={})
-			response = @client.request(:get, "#{@endpoint}/subscriptions", opts)
+			response = @client.request(:get, "#{self.endpoint()}/subscriptions", opts)
 
 			# build objects
 			subscription = Subscription.new(@client)
@@ -33,11 +33,12 @@ module Invoiced
 		end
 
 		def line_items(opts={})
-			LineItem.new(@client, nil, {}, self)
+			line = LineItem.new(@client)
+			line.set_endpoint_base(self.endpoint())
 		end
 
 		def invoice(opts={})
-			response = @client.request(:post, "#{@endpoint}/invoices", opts)
+			response = @client.request(:post, "#{self.endpoint()}/invoices", opts)
 
 			# build invoice object
 			invoice = Invoice.new(@client)

@@ -2,6 +2,11 @@ require File.expand_path('../../test_helper', __FILE__)
 
 module Invoiced
   class SubscriptionTest < Test::Unit::TestCase
+    should "return the api endpoint" do
+      subscription = Subscription.new(@client, 123)
+      assert_equal('/subscriptions/123', subscription.endpoint())
+    end
+
     should "create a subscription" do
       mockResponse = mock('RestClient::Response')
       mockResponse.stubs(:code).returns(201)

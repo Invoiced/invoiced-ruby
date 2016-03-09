@@ -2,6 +2,11 @@ require File.expand_path('../../test_helper', __FILE__)
 
 module Invoiced
   class InvoiceTest < Test::Unit::TestCase
+    should "return the api endpoint" do
+      invoice = Invoice.new(@client, 123)
+      assert_equal('/invoices/123', invoice.endpoint())
+    end
+
     should "create an invoice" do
       mockResponse = mock('RestClient::Response')
       mockResponse.stubs(:code).returns(201)

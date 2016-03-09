@@ -2,7 +2,7 @@ module Invoiced
 	module Operations
 		module List
 			def list(opts={})
-    			response = @client.request(:get, @endpoint, opts)
+    			response = @client.request(:get, self.endpoint(), opts)
 
     			# build objects
     			objects = Util.build_objects(self, response[:body])

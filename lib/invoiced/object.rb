@@ -9,6 +9,7 @@ module Invoiced
 		def initialize(client, id=nil, values={})
 			@client = client
 			class_name = self.class.name.split('::').last
+			@endpoint_base = ''
 			@endpoint = '/' + class_name.underscore.pluralize.downcase
 
 			@id = id
@@ -21,14 +22,27 @@ module Invoiced
 			end
 		end
 
+		def set_endpoint_base(base)
+			@endpoint_base = base
+			self
+		end
+
+		def endpoint_base()
+			@endpoint_base
+		end
+
+		def endpoint()
+			@endpoint_base + @endpoint
+		end
+
 	    def retrieve(id, opts={})
 	    	if !id
 	    		raise ArgumentError.new("Missing ID.")
 	    	end
 
-	    	response = @client.request(:get, "#{@endpoint}/#{id}", opts)
+	    	response = @client.request(:get, "#{self.endpoint()}/#{id}", opts)
 
-	    	self.class.new(@client, id, response[:body])
+	    	Util.convert_to_object(self, response[:body])
 	    end
 
 	    def load(opts={})

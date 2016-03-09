@@ -2,6 +2,11 @@ require File.expand_path('../../test_helper', __FILE__)
 
 module Invoiced
   class CustomerTest < Test::Unit::TestCase
+    should "return the api endpoint" do
+      customer = Customer.new(@client, 123)
+      assert_equal('/customers/123', customer.endpoint())
+    end
+
     should "create a customer" do
       mockResponse = mock('RestClient::Response')
       mockResponse.stubs(:code).returns(201)
@@ -20,7 +25,7 @@ module Invoiced
     should "retrieve a customer" do
       mockResponse = mock('RestClient::Response')
       mockResponse.stubs(:code).returns(200)
-      mockResponse.stubs(:body).returns('{"id":"123","name":"Pied Piper"}')
+      mockResponse.stubs(:body).returns('{"id":123,"name":"Pied Piper"}')
       mockResponse.stubs(:headers).returns({})
 
       RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
@@ -146,12 +151,13 @@ module Invoiced
 
       RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
 
-      customer = Customer.new(@client, 123)
+      customer = Customer.new(@client, 456)
       line_item = customer.line_items.create({:unit_cost => 500})
 
       assert_instance_of(Invoiced::LineItem, line_item)
       assert_equal(123, line_item.id)
       assert_equal(500, line_item.unit_cost)
+      assert_equal('/customers/456/line_items/123', line_item.endpoint())
     end
 
     should "list all of the customer's pending line item" do
@@ -162,12 +168,13 @@ module Invoiced
 
       RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
 
-      customer = Customer.new(@client, 123)
+      customer = Customer.new(@client, 456)
       line_items, metadata = customer.line_items.list
 
       assert_instance_of(Array, line_items)
       assert_equal(1, line_items.length)
       assert_equal(123, line_items[0].id)
+      assert_equal('/customers/456/line_items/123', line_items[0].endpoint())
 
       assert_instance_of(Invoiced::List, metadata)
       assert_equal(10, metadata.total_count)
@@ -181,12 +188,13 @@ module Invoiced
 
       RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
 
-      customer = Customer.new(@client, 123)
+      customer = Customer.new(@client, 456)
       line_item = customer.line_items.retrieve(123)
 
       assert_instance_of(Invoiced::LineItem, line_item)
       assert_equal(123, line_item.id)
       assert_equal(500, line_item.unit_cost)
+      assert_equal('/customers/456/line_items/123', line_item.endpoint())
     end
 
     should "create an invoice" do

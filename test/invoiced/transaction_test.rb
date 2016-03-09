@@ -2,6 +2,11 @@ require File.expand_path('../../test_helper', __FILE__)
 
 module Invoiced
   class TransactionTest < Test::Unit::TestCase
+    should "return the api endpoint" do
+      transaction = Transaction.new(@client, 123)
+      assert_equal('/transactions/123', transaction.endpoint())
+    end
+
     should "create a transaction" do
       mockResponse = mock('RestClient::Response')
       mockResponse.stubs(:code).returns(201)

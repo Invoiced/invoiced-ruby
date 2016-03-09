@@ -6,7 +6,7 @@ module Invoiced
 		include Invoiced::Operations::Delete
 
 		def send(opts={})
-			response = @client.request(:post, "#{@endpoint}/emails", opts)
+			response = @client.request(:post, "#{self.endpoint()}/emails", opts)
 
 			# build email objects
 			email = Email.new(@client)
@@ -14,7 +14,7 @@ module Invoiced
 		end
 
 		def refund(opts={})
-			response = @client.request(:post, "#{@endpoint}/refunds", opts)
+			response = @client.request(:post, "#{self.endpoint()}/refunds", opts)
 
 			Util.convert_to_object(self, response[:body])
 		end

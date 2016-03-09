@@ -16,8 +16,9 @@ module Invoiced
 				}
 			end
 
-			def convert_to_object(_class, object)
-				_class.class.new(_class.client, object[:id], object)
+			def convert_to_object(_class, values)
+				object = _class.class.new(_class.client, values[:id], values)
+				object.set_endpoint_base(_class.endpoint_base())
 			end
 
 			private
