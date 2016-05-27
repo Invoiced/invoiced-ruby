@@ -19,6 +19,11 @@ module Invoiced
 			response[:body]
 		end
 
+		def contacts(opts={})
+			contact = Contact.new(@client)
+			contact.set_endpoint_base(self.endpoint())
+		end
+
 		def line_items(opts={})
 			line = LineItem.new(@client)
 			line.set_endpoint_base(self.endpoint())

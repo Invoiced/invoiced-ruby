@@ -17,6 +17,7 @@ require 'invoiced/operations/delete'
 require 'invoiced/operations/update'
 
 require 'invoiced/object'
+require 'invoiced/contact'
 require 'invoiced/customer'
 require 'invoiced/email'
 require 'invoiced/invoice'

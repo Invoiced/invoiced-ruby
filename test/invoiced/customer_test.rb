@@ -124,6 +124,60 @@ module Invoiced
       assert_equal(expected, balance)
     end
 
+    should "create a contact" do
+      mockResponse = mock('RestClient::Response')
+      mockResponse.stubs(:code).returns(201)
+      mockResponse.stubs(:body).returns('{"id":123,"name":"Nancy"}')
+      mockResponse.stubs(:headers).returns({})
+
+      RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
+
+      customer = Customer.new(@client, 456)
+      contact = customer.contacts.create({:name => "Nancy"})
+
+      assert_instance_of(Invoiced::Contact, contact)
+      assert_equal(123, contact.id)
+      assert_equal("Nancy", contact.name)
+      assert_equal('/customers/456/contacts/123', contact.endpoint())
+    end
+
+    should "list all of the customer's contact" do
+      mockResponse = mock('RestClient::Response')
+      mockResponse.stubs(:code).returns(200)
+      mockResponse.stubs(:body).returns('[{"id":123,"name":"Nancy"}]')
+      mockResponse.stubs(:headers).returns(:x_total_count => 10, :link => '<https://api.invoiced.com/customers/123/contacts?per_page=25&page=1>; rel="self", <https://api.invoiced.com/customers/123/contacts?per_page=25&page=1>; rel="first", <https://api.invoiced.com/customers/123/contacts?per_page=25&page=1>; rel="last"')
+
+      RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
+
+      customer = Customer.new(@client, 456)
+      contacts, metadata = customer.contacts.list
+
+      assert_instance_of(Array, contacts)
+      assert_equal(1, contacts.length)
+      assert_equal(123, contacts[0].id)
+      assert_equal('/customers/456/contacts/123', contacts[0].endpoint())
+
+      assert_instance_of(Invoiced::List, metadata)
+      assert_equal(10, metadata.total_count)
+    end
+
+    should "retrieve a contact" do
+      mockResponse = mock('RestClient::Response')
+      mockResponse.stubs(:code).returns(200)
+      mockResponse.stubs(:body).returns('{"id":123,"name":"Nancy"}')
+      mockResponse.stubs(:headers).returns({})
+
+      RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
+
+      customer = Customer.new(@client, 456)
+      contact = customer.contacts.retrieve(123)
+
+      assert_instance_of(Invoiced::Contact, contact)
+      assert_equal(123, contact.id)
+      assert_equal("Nancy", contact.name)
+      assert_equal('/customers/456/contacts/123', contact.endpoint())
+    end
+
     should "create a pending line item" do
       mockResponse = mock('RestClient::Response')
       mockResponse.stubs(:code).returns(201)
