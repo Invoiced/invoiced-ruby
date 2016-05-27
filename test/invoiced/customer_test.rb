@@ -124,25 +124,6 @@ module Invoiced
       assert_equal(expected, balance)
     end
 
-    should "list all of the customer's subscriptions" do
-      mockResponse = mock('RestClient::Response')
-      mockResponse.stubs(:code).returns(200)
-      mockResponse.stubs(:body).returns('[{"id":123,"plan":456}]')
-      mockResponse.stubs(:headers).returns(:x_total_count => 10, :link => '<https://api.invoiced.com/customers/123/subscriptions?per_page=25&page=1>; rel="self", <https://api.invoiced.com/customers/123/subscriptions?per_page=25&page=1>; rel="first", <https://api.invoiced.com/customers/123/subscriptions?per_page=25&page=1>; rel="last"')
-
-      RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
-
-      customer = Customer.new(@client, 123)
-      subscriptions, metadata = customer.subscriptions
-
-      assert_instance_of(Array, subscriptions)
-      assert_equal(1, subscriptions.length)
-      assert_equal(123, subscriptions[0].id)
-
-      assert_instance_of(Invoiced::List, metadata)
-      assert_equal(10, metadata.total_count)
-    end
-
     should "create a pending line item" do
       mockResponse = mock('RestClient::Response')
       mockResponse.stubs(:code).returns(201)
