@@ -9,9 +9,9 @@ Gem::Specification.new do |s|
   s.summary     = "Ruby client library for the Invoiced API"
   s.description = "Invoiced makes invoicing and recurring billing dead simple"
   s.authors     = ["Jared King"]
-  s.email       = 'api@invoiced.com'
+  s.email       = 'support@invoiced.com'
   s.files       = ["lib/invoiced.rb"]
-  s.homepage    = 'https://developers.invoiced.com'
+  s.homepage    = 'https://invoiced.com/docs/dev'
   s.required_ruby_version = '>= 1.9.3'
 
   s.add_dependency('rest-client', '~> 1.8.0')
