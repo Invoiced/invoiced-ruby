@@ -21,5 +21,26 @@ module Invoiced
 
 			return response[:code] == 200
 		end
+
+		def attachments(opts={})
+			response = @client.request(:get, "#{self.endpoint()}/attachments", opts)
+
+			# ensure each attachment has an ID
+			body = response[:body]
+			body.each do |attachment|
+				if !attachment.has_key?(:id)
+					attachment[:id] = attachment[:file][:id]
+				end
+			end
+
+			# build objects
+			attachment = Attachment.new(@client)
+			attachments = Util.build_objects(attachment, body)
+
+			# store the metadata from the list operation
+			metadata = Invoiced::List.new(response[:headers][:link], response[:headers][:x_total_count])
+
+			return attachments, metadata
+		end
 	end
 end

@@ -117,5 +117,24 @@ module Invoiced
 
       assert_true(invoice.paid)
     end
+
+    should "list all of the invoice's attachments" do
+      mockResponse = mock('RestClient::Response')
+      mockResponse.stubs(:code).returns(200)
+      mockResponse.stubs(:body).returns('[{"file":{"id":456}}]')
+      mockResponse.stubs(:headers).returns(:x_total_count => 10, :link => '<https://api.invoiced.com/invoices/123/attachments?per_page=25&page=1>; rel="self", <https://api.invoiced.com/invoices/123/attachments?per_page=25&page=1>; rel="first", <https://api.invoiced.com/invoices/123/attachments?per_page=25&page=1>; rel="last"')
+
+      RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
+
+      invoice = Invoice.new(@client, 123)
+      attachments, metadata = invoice.attachments
+
+      assert_instance_of(Array, attachments)
+      assert_equal(1, attachments.length)
+      assert_equal(456, attachments[0].id)
+
+      assert_instance_of(Invoiced::List, metadata)
+      assert_equal(10, metadata.total_count)
+    end
   end
 end
