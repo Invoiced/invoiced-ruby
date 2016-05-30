@@ -20,6 +20,7 @@ require 'invoiced/object'
 require 'invoiced/contact'
 require 'invoiced/customer'
 require 'invoiced/email'
+require 'invoiced/file'
 require 'invoiced/invoice'
 require 'invoiced/line_item'
 require 'invoiced/transaction'
@@ -31,13 +32,16 @@ module Invoiced
 		ApiBaseSandbox = 'https://api.sandbox.invoiced.com'
 
 		attr_reader :api_key, :api_url, :sandbox
-		attr_reader :Customer, :Invoice, :Transaction, :Subscription
+		attr_reader :Customer, :File, :Invoice, :Transaction, :Subscription
 
 	    def initialize(api_key, sandbox=false)
 	      @api_key = api_key
 	      @sandbox = sandbox
 	      @api_url = sandbox ? ApiBaseSandbox : ApiBase
+
+	      # Object endpoints
 	      @Customer = Invoiced::Customer.new(self)
+	      @File = Invoiced::File.new(self)
 	      @Invoice = Invoiced::Invoice.new(self)
 	      @Transaction = Invoiced::Transaction.new(self)
 	      @Subscription = Invoiced::Subscription.new(self)
