@@ -77,14 +77,15 @@ module Invoiced
 
     should "cancel a subscription" do
       mockResponse = mock('RestClient::Response')
-      mockResponse.stubs(:code).returns(204)
-      mockResponse.stubs(:body).returns('')
+      mockResponse.stubs(:code).returns(200)
+      mockResponse.stubs(:body).returns('{"id":123,"plan":"pro","status":"canceled"}')
       mockResponse.stubs(:headers).returns({})
 
       RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
 
       subscription = Subscription.new(@client, 123)
       assert_true(subscription.cancel)
+      assert_equal("canceled", subscription.status)
     end
   end
 end
