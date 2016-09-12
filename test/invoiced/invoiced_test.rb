@@ -24,16 +24,16 @@ module Invoiced
       mockResponse.stubs(:headers).returns(:Header => "test")
 
       # not used
-      expectedParameters = {
-        :method => "GET",
-        :url => "https://api.invoiced.com/invoices?test=property&filter[levels]=work",
-        :headers => {
-          :authorization => "Basic dGVzdDo=",
-          :content_type => "application/json",
-          :user_agent => "Invoiced Ruby/#{Invoiced::VERSION}"
-        },
-        :payload => nil
-      }
+      # expectedParameters = {
+      #   :method => "GET",
+      #   :url => "https://api.invoiced.com/invoices?test=property&filter[levels]=work",
+      #   :headers => {
+      #     :authorization => "Basic dGVzdDo=",
+      #     :content_type => "application/json",
+      #     :user_agent => "Invoiced Ruby/#{Invoiced::VERSION}"
+      #   },
+      #   :payload => nil
+      # }
 
       RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
 
@@ -64,16 +64,16 @@ module Invoiced
       mockResponse.stubs(:headers).returns(:Header => "test")
 
       # not used
-      expectedParameters = {
-        :method => "POST",
-        :url => "https://api.invoiced.com/invoices?test=property&filter[levels]=work",
-        :headers => {
-          :authorization => "Basic dGVzdDo=",
-          :content_type => "application/json",
-          :user_agent => "Invoiced Ruby/#{Invoiced::VERSION}"
-        },
-        :payload => '{"test":"property"}'
-      }
+      # expectedParameters = {
+      #   :method => "POST",
+      #   :url => "https://api.invoiced.com/invoices?test=property&filter[levels]=work",
+      #   :headers => {
+      #     :authorization => "Basic dGVzdDo=",
+      #     :content_type => "application/json",
+      #     :user_agent => "Invoiced Ruby/#{Invoiced::VERSION}"
+      #   },
+      #   :payload => '{"test":"property"}'
+      # }
 
       RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
 

@@ -160,7 +160,7 @@ module Invoiced
 			begin
 				super
 			rescue NoMethodError => e
-				raise
+				raise e
 			end
 		end
 	end
