@@ -24,7 +24,7 @@ module Invoiced
             private
 
             def url_encode(params)
-                URI.escape(params.to_s, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
+                URI.encode_www_form_component(params)
             end
 
             def flatten_params(params, parent_key=nil)
