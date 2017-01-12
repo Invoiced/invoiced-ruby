@@ -19,6 +19,7 @@ require 'invoiced/operations/update'
 require 'invoiced/object'
 require 'invoiced/attachment'
 require 'invoiced/contact'
+require 'invoiced/credit_note'
 require 'invoiced/customer'
 require 'invoiced/email'
 require 'invoiced/event'
@@ -34,7 +35,7 @@ module Invoiced
 		ApiBaseSandbox = 'https://api.sandbox.invoiced.com'
 
 		attr_reader :api_key, :api_url, :sandbox
-		attr_reader :Customer, :Event, :File, :Invoice, :Subscription, :Transaction
+		attr_reader :CreditNote, :Customer, :Event, :File, :Invoice, :Subscription, :Transaction
 
 	    def initialize(api_key, sandbox=false)
 	      @api_key = api_key
@@ -42,6 +43,7 @@ module Invoiced
 	      @api_url = sandbox ? ApiBaseSandbox : ApiBase
 
 	      # Object endpoints
+	      @CreditNote = Invoiced::CreditNote.new(self)
 	      @Customer = Invoiced::Customer.new(self)
 	      @Event = Invoiced::Event.new(self)
 	      @File = Invoiced::File.new(self)
