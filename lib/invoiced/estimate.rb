@@ -13,6 +13,14 @@ module Invoiced
             Util.build_objects(email, response[:body])
         end
 
+        def generate_invoice(opts={})
+            response = @client.request(:post, "#{self.endpoint()}/invoice", opts)
+
+            # build invoice object
+            invoice = Invoice.new(@client)
+            Util.convert_to_object(invoice, response[:body])
+        end
+
         def attachments(opts={})
             response = @client.request(:get, "#{self.endpoint()}/attachments", opts)
 
