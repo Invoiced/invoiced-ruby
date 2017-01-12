@@ -1,5 +1,5 @@
 module Invoiced
     class Event < Object
-		include Invoiced::Operations::List
-	end
+        include Invoiced::Operations::List
+    end
 end

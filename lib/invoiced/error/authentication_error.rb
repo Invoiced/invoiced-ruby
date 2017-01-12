@@ -1,5 +1,5 @@
 module Invoiced
-	class AuthenticationError < ErrorBase
+    class AuthenticationError < ErrorBase
 
-	end
+    end
 end

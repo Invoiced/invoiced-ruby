@@ -1,5 +1,5 @@
 module Invoiced
-	class ApiError < ErrorBase
+    class ApiError < ErrorBase
 
-	end
+    end
 end

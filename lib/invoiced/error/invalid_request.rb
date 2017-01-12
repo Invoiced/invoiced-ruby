@@ -1,5 +1,5 @@
 module Invoiced
-	class InvalidRequestError < ErrorBase
+    class InvalidRequestError < ErrorBase
 
-	end
+    end
 end

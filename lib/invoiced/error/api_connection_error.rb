@@ -1,5 +1,5 @@
 module Invoiced
-	class ApiConnectionError < ErrorBase
+    class ApiConnectionError < ErrorBase
 
-	end
+    end
 end
