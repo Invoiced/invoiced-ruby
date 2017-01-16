@@ -136,5 +136,39 @@ module Invoiced
       assert_instance_of(Invoiced::List, metadata)
       assert_equal(10, metadata.total_count)
     end
+
+    should "create a payment plan" do
+      mockResponse = mock('RestClient::Response')
+      mockResponse.stubs(:code).returns(201)
+      mockResponse.stubs(:body).returns('{"id":123,"status":"active"}')
+      mockResponse.stubs(:headers).returns({})
+
+      RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
+
+      invoice = Invoice.new(@client, 456)
+      payment_plan = invoice.payment_plan.create({:installments => [{"date"=>1234,"amount" => 100}]})
+
+      assert_instance_of(Invoiced::PaymentPlan, payment_plan)
+      assert_equal(123, payment_plan.id)
+      assert_equal("active", payment_plan.status)
+      assert_equal('/invoices/456/payment_plan', payment_plan.endpoint())
+    end
+
+    should "retrieve a payment plan" do
+      mockResponse = mock('RestClient::Response')
+      mockResponse.stubs(:code).returns(200)
+      mockResponse.stubs(:body).returns('{"id":123,"status":"active"}')
+      mockResponse.stubs(:headers).returns({})
+
+      RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
+
+      invoice = Invoice.new(@client, 456)
+      payment_plan = invoice.payment_plan.retrieve()
+
+      assert_instance_of(Invoiced::PaymentPlan, payment_plan)
+      assert_equal(123, payment_plan.id)
+      assert_equal("active", payment_plan.status)
+      assert_equal('/invoices/456/payment_plan', payment_plan.endpoint())
+    end
   end
 end

@@ -42,5 +42,10 @@ module Invoiced
 
             return attachments, metadata
         end
+
+        def payment_plan(opts={})
+            paymentPlan = PaymentPlan.new(@client)
+            paymentPlan.set_endpoint_base(self.endpoint())
+        end
     end
 end

@@ -27,6 +27,7 @@ require 'invoiced/event'
 require 'invoiced/file'
 require 'invoiced/invoice'
 require 'invoiced/line_item'
+require 'invoiced/payment_plan'
 require 'invoiced/subscription'
 require 'invoiced/transaction'
 
