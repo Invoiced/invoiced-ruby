@@ -1,6 +1,5 @@
 module Invoiced
     class PaymentPlan < Object
-        include Invoiced::Operations::List
         include Invoiced::Operations::Delete
 
         def initialize(client, id=nil, values={})
