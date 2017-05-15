@@ -8,7 +8,7 @@ module Invoiced
                     update[k] = @values[k]
                 end
 
-                update.merge(params)
+                update = update.merge(params)
 
                 # perform the update if there are any changes
                 if update.length > 0
