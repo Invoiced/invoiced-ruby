@@ -38,6 +38,9 @@ module Invoiced
         ApiBase = 'https://api.invoiced.com'
         ApiBaseSandbox = 'https://api.sandbox.invoiced.com'
 
+        OpenTimeout = 30
+        ReadTimeout = 80
+
         attr_reader :api_key, :api_url, :sandbox
         attr_reader :CatalogItem, :CreditNote, :Customer, :Estimate, :Event, :File, :Invoice, :Plan, :Subscription, :Transaction
 
@@ -82,13 +85,15 @@ module Invoiced
                         :content_type => "application/json",
                         :user_agent => "Invoiced Ruby/#{Invoiced::VERSION}"
                     },
-                    :payload => payload
+                    :payload => payload,
+                    :open_timeout => OpenTimeout,
+                    :timeout => ReadTimeout
                 )
             rescue RestClient::Exception => e
                 if e.response
-                    rescue_api_error(e.response)
+                    handle_api_error(e.response)
                 else
-                    rescue_rest_client_error(e)
+                    handle_network_error(e)
                 end
             end
 
@@ -111,7 +116,7 @@ module Invoiced
             }
         end
 
-        def rescue_api_error(response)
+        def handle_api_error(response)
             begin
                 error = JSON.parse(response.body)
             rescue JSON::ParserError
@@ -128,8 +133,21 @@ module Invoiced
             end
         end
 
-        def rescue_rest_client_error(error)
-            raise ApiConnectionError.new("There was an error connecting to Invoiced.")
+        def handle_network_error(error)
+            case error
+            when RestClient::Exceptions::OpenTimeout
+                message = "Timeed out while connecting to Invoiced. Please check your internet connection or status.invoiced.com for service outages."
+            when RestClient::Exceptions::ReadTimeout
+                message = "The request timed out reading data from the server."
+            when RestClient::ServerBrokeConnection
+                message = "Connection with the server was broken while receiving the response."
+            when RestClient::SSLCertificateNotVerified
+                message = "Failed to verify the Invoiced SSL certificate. Please verify that you have a recent version of OpenSSL installed."
+            else
+                message = "There was an error connecting to Invoiced: #{error.message}"
+            end
+
+            raise ApiConnectionError.new(message)
         end
 
         def authentication_error(error, response)

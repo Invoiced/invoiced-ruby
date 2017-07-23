@@ -93,8 +93,48 @@ module Invoiced
       assert_equal(expectedResponse, response)
     end
 
-    should "handle a request exception" do
+    should "handle a generic network error" do
       RestClient::Request.any_instance.expects(:execute).raises(RestClient::Exception.new)
+
+      client = Invoiced::Client.new('test')
+
+      assert_raise Invoiced::ApiConnectionError do
+        client.request("POST", "/invoices")
+      end
+    end
+
+    should "handle an invalid SSL certificate" do
+      RestClient::Request.any_instance.expects(:execute).raises(RestClient::SSLCertificateNotVerified.new('invalid ssl cert'))
+
+      client = Invoiced::Client.new('test')
+
+      assert_raise Invoiced::ApiConnectionError do
+        client.request("POST", "/invoices")
+      end
+    end
+
+    should "handle a connection timeout" do
+      RestClient::Request.any_instance.expects(:execute).raises(RestClient::Exceptions::OpenTimeout.new)
+
+      client = Invoiced::Client.new('test')
+
+      assert_raise Invoiced::ApiConnectionError do
+        client.request("POST", "/invoices")
+      end
+    end
+
+    should "handle a read timeout" do
+      RestClient::Request.any_instance.expects(:execute).raises(RestClient::Exceptions::ReadTimeout.new)
+
+      client = Invoiced::Client.new('test')
+
+      assert_raise Invoiced::ApiConnectionError do
+        client.request("POST", "/invoices")
+      end
+    end
+
+    should "handle an unfinished request" do
+      RestClient::Request.any_instance.expects(:execute).raises(RestClient::ServerBrokeConnection.new)
 
       client = Invoiced::Client.new('test')
 

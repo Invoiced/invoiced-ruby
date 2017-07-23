@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.homepage    = 'https://invoiced.com/docs/dev'
   s.required_ruby_version = '>= 1.9.3'
 
-  s.add_dependency('rest-client', '~> 1.8.0')
+  s.add_dependency('rest-client', '~> 2.0.0')
   s.add_dependency('json', '~> 1.8.3')
   s.add_dependency('activesupport', '~> 4.2.3')
 
