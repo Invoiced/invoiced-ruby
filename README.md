@@ -24,7 +24,7 @@ gem 'invoiced'
 
 ## Requirements
 
-- Ruby 1.9.3+
+- Ruby 2.0+
 - rest_client, json, and active_support gems
 
 ## Usage
