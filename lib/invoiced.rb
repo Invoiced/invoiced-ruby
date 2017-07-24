@@ -139,7 +139,7 @@ module Invoiced
         def handle_network_error(error)
             case error
             when RestClient::Exceptions::OpenTimeout
-                message = "Timeed out while connecting to Invoiced. Please check your internet connection or status.invoiced.com for service outages."
+                message = "Timed out while connecting to Invoiced. Please check your internet connection or status.invoiced.com for service outages."
             when RestClient::Exceptions::ReadTimeout
                 message = "The request timed out reading data from the server."
             when RestClient::ServerBrokeConnection
