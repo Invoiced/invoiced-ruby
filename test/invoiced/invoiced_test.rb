@@ -177,6 +177,23 @@ module Invoiced
       end
     end
 
+    should "handle a rate limit error" do
+      mockResponse = mock('RestClient::Response')
+      mockResponse.stubs(:code).returns(429)
+      mockResponse.stubs(:body).returns('{"error":true}')
+
+      ex = RestClient::ExceptionWithResponse.new
+      ex.response = mockResponse
+
+      RestClient::Request.any_instance.expects(:execute).raises(ex)
+
+      client = Invoiced::Client.new('test')
+
+      assert_raise Invoiced::RateLimitError do
+        client.request("POST", "/invoices")
+      end
+    end
+
     should "handle an api error" do
       mockResponse = mock('RestClient::Response')
       mockResponse.stubs(:code).returns(500)

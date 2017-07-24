@@ -10,6 +10,7 @@ require 'invoiced/error/api_connection_error'
 require 'invoiced/error/api_error'
 require 'invoiced/error/authentication_error'
 require 'invoiced/error/invalid_request'
+require 'invoiced/error/rate_limit_error'
 require 'invoiced/list'
 require 'invoiced/operations/list'
 require 'invoiced/operations/create'
@@ -128,6 +129,8 @@ module Invoiced
                 raise invalid_request_error(error, response)
             when 401
                 raise authentication_error(error, response)
+            when 429
+                raise rate_limit_error(error, response)
             else
                 raise api_error(error, response)
             end
@@ -156,6 +159,10 @@ module Invoiced
 
         def invalid_request_error(error, response)
             InvalidRequestError.new(error["message"], response.code, error)
+        end
+
+        def rate_limit_error(error, response)
+            RateLimitError.new(error["message"], response.code, error)
         end
 
         def api_error(error, response)
