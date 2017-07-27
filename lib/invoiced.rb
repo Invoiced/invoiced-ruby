@@ -63,7 +63,7 @@ module Invoiced
           @Transaction = Invoiced::Transaction.new(self)
         end
 
-        def request(method, endpoint, params={})
+        def request(method, endpoint, params={}, opts={})
             url = @api_url + endpoint
 
             case method.to_s.downcase.to_sym
@@ -81,11 +81,7 @@ module Invoiced
                 response = RestClient::Request.execute(
                     :method => method,
                     :url => url,
-                    :headers => {
-                        :authorization => Util.auth_header(@api_key),
-                        :content_type => "application/json",
-                        :user_agent => "Invoiced Ruby/#{Invoiced::VERSION}"
-                    },
+                    :headers => buildHeaders(opts),
                     :payload => payload,
                     :open_timeout => OpenTimeout,
                     :timeout => ReadTimeout
@@ -102,6 +98,21 @@ module Invoiced
         end
 
         private
+
+        def buildHeaders(opts)
+            headers = {
+                :authorization => Util.auth_header(@api_key),
+                :content_type => "application/json",
+                :user_agent => "Invoiced Ruby/#{Invoiced::VERSION}"
+            }
+
+            # idempotency keys
+            if opts[:idempotency_key]
+                headers[:idempotency_key] = opts[:idempotency_key]
+            end
+
+            return headers
+        end
 
         def parse(response)
             unless response.code == 204

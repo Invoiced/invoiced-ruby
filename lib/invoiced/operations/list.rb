@@ -1,8 +1,8 @@
 module Invoiced
     module Operations
         module List
-            def list(opts={})
-                response = @client.request(:get, self.endpoint(), opts)
+            def list(params={})
+                response = @client.request(:get, self.endpoint(), params)
 
                 # build objects
                 objects = Util.build_objects(self, response[:body])

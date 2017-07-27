@@ -35,17 +35,14 @@ module Invoiced
             @endpoint_base + @endpoint
         end
 
-        def retrieve(id, opts={})
+        def retrieve(id, params={})
             if !id
                 raise ArgumentError.new("Missing ID.")
             end
 
-            response = @client.request(:get, "#{self.endpoint()}/#{id}", opts)
+            response = @client.request(:get, "#{self.endpoint()}/#{id}", params)
 
             Util.convert_to_object(self, response[:body])
-        end
-
-        def load(opts={})
         end
 
         def to_s(*args)

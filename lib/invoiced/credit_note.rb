@@ -5,16 +5,16 @@ module Invoiced
         include Invoiced::Operations::Update
         include Invoiced::Operations::Delete
 
-        def send(opts={})
-            response = @client.request(:post, "#{self.endpoint()}/emails", opts)
+        def send(params={}, opts={})
+            response = @client.request(:post, "#{self.endpoint()}/emails", params, opts)
 
             # build email objects
             email = Email.new(@client)
             Util.build_objects(email, response[:body])
         end
 
-        def attachments(opts={})
-            response = @client.request(:get, "#{self.endpoint()}/attachments", opts)
+        def attachments(params={})
+            response = @client.request(:get, "#{self.endpoint()}/attachments", params)
 
             # ensure each attachment has an ID
             body = response[:body]

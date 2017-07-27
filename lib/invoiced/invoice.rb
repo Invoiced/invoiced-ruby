@@ -5,16 +5,16 @@ module Invoiced
         include Invoiced::Operations::Update
         include Invoiced::Operations::Delete
 
-        def send(opts={})
-            response = @client.request(:post, "#{self.endpoint()}/emails", opts)
+        def send(params={}, opts={})
+            response = @client.request(:post, "#{self.endpoint()}/emails", params, opts)
 
             # build email objects
             email = Email.new(@client)
             Util.build_objects(email, response[:body])
         end
 
-        def pay
-            response = @client.request(:post, "#{self.endpoint()}/pay")
+        def pay(opts={})
+            response = @client.request(:post, "#{self.endpoint()}/pay", {}, opts)
 
             # update the local values with the response
             refresh_from(response[:body].dup.merge({:id => self.id}))
@@ -22,8 +22,8 @@ module Invoiced
             return response[:code] == 200
         end
 
-        def attachments(opts={})
-            response = @client.request(:get, "#{self.endpoint()}/attachments", opts)
+        def attachments(params={})
+            response = @client.request(:get, "#{self.endpoint()}/attachments", params)
 
             # ensure each attachment has an ID
             body = response[:body]
@@ -43,7 +43,7 @@ module Invoiced
             return attachments, metadata
         end
 
-        def payment_plan(opts={})
+        def payment_plan()
             paymentPlan = PaymentPlan.new(@client)
             paymentPlan.set_endpoint_base(self.endpoint())
         end

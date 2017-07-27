@@ -5,8 +5,8 @@ module Invoiced
         include Invoiced::Operations::Update
         include Invoiced::Operations::Delete
 
-        def send_statement(opts={})
-            response = @client.request(:post, "#{self.endpoint()}/emails", opts)
+        def send_statement(params={}, opts={})
+            response = @client.request(:post, "#{self.endpoint()}/emails", params, opts)
 
             # build email objects
             email = Email.new(@client)
@@ -19,18 +19,18 @@ module Invoiced
             response[:body]
         end
 
-        def contacts(opts={})
+        def contacts()
             contact = Contact.new(@client)
             contact.set_endpoint_base(self.endpoint())
         end
 
-        def line_items(opts={})
+        def line_items()
             line = LineItem.new(@client)
             line.set_endpoint_base(self.endpoint())
         end
 
-        def invoice(opts={})
-            response = @client.request(:post, "#{self.endpoint()}/invoices", opts)
+        def invoice(params={}, opts={})
+            response = @client.request(:post, "#{self.endpoint()}/invoices", params, opts)
 
             # build invoice object
             invoice = Invoice.new(@client)

@@ -93,6 +93,40 @@ module Invoiced
       assert_equal(expectedResponse, response)
     end
 
+    should "perform an idempotent post request" do
+      mockResponse = mock('RestClient::Response')
+      mockResponse.stubs(:code).returns(204)
+      mockResponse.stubs(:headers).returns({})
+
+      # not used
+      # expectedParameters = {
+      #   :method => "POST",
+      #   :url => "https://api.invoiced.com/invoices?test=property&filter[levels]=work",
+      #   :headers => {
+      #     :authorization => "Basic dGVzdDo=",
+      #     :content_type => "application/json",
+      #     :user_agent => "Invoiced Ruby/#{Invoiced::VERSION}"
+      #     :idempotency_key => "a random value"
+      #   },
+      #   :payload => '{"test":"property"}'
+      # }
+
+      RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
+
+      client = Invoiced::Client.new('test')
+      params = {
+        "test" => "property"
+      }
+      response = client.request("POST", "/invoices", params, {:idempotency_key => "a random value"})
+
+      expectedResponse = {
+        :code => 204,
+        :headers => {},
+        :body => nil
+      }
+      assert_equal(expectedResponse, response)
+    end
+
     should "handle a generic network error" do
       RestClient::Request.any_instance.expects(:execute).raises(RestClient::Exception.new)
 

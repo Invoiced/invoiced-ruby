@@ -5,16 +5,16 @@ module Invoiced
         include Invoiced::Operations::Update
         include Invoiced::Operations::Delete
 
-        def send(opts={})
-            response = @client.request(:post, "#{self.endpoint()}/emails", opts)
+        def send(params={}, opts={})
+            response = @client.request(:post, "#{self.endpoint()}/emails", params, opts)
 
             # build email objects
             email = Email.new(@client)
             Util.build_objects(email, response[:body])
         end
 
-        def refund(opts={})
-            response = @client.request(:post, "#{self.endpoint()}/refunds", opts)
+        def refund(params={}, opts={})
+            response = @client.request(:post, "#{self.endpoint()}/refunds", params, opts)
 
             Util.convert_to_object(self, response[:body])
         end
