@@ -8,10 +8,8 @@ module Invoiced
 
         def initialize(client, id=nil, values={})
             @client = client
-            class_name = self.class.name.split('::').last
             @endpoint_base = ''
-            @endpoint = '/' + class_name.underscore.pluralize.downcase
-
+            @endpoint = build_endpoint
             @id = id
             @values = {}
 
@@ -33,6 +31,14 @@ module Invoiced
 
         def endpoint()
             @endpoint_base + @endpoint
+        end
+
+        def build_endpoint
+            if self.class.const_defined? "OBJECT_NAME"
+                '/' + self.class::OBJECT_NAME + 's'
+            else
+                '/objects'
+            end
         end
 
         def retrieve(id, params={})
