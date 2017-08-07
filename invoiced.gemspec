@@ -15,7 +15,6 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 2.0.0'
 
   s.add_dependency('rest-client', '~> 2.0.0')
-  s.add_dependency('json', '~> 1.8.3')
   s.add_dependency('activesupport', '~> 4.2.3')
 
   s.add_development_dependency('mocha', '~> 0.13.2')
