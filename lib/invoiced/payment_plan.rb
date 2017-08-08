@@ -2,6 +2,8 @@ module Invoiced
     class PaymentPlan < Object
         include Invoiced::Operations::Delete
 
+        OBJECT_NAME = 'payment_plan'
+
         def initialize(client, id=nil, values={})
         	super
         	@endpoint = '/payment_plan'

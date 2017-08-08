@@ -5,6 +5,8 @@ module Invoiced
         include Invoiced::Operations::Update
         include Invoiced::Operations::Delete
 
+        OBJECT_NAME = 'invoice'
+
         def send(params={}, opts={})
             response = @client.request(:post, "#{self.endpoint()}/emails", params, opts)
 

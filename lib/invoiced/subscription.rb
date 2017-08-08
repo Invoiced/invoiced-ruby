@@ -5,6 +5,8 @@ module Invoiced
         include Invoiced::Operations::Update
         include Invoiced::Operations::Delete
 
+        OBJECT_NAME = 'subscription'
+
         def cancel
             delete
         end

@@ -1,7 +1,6 @@
 require 'rest-client'
 require 'json'
 require 'base64'
-require 'active_support/inflector'
 
 require 'invoiced/version'
 require 'invoiced/util'
