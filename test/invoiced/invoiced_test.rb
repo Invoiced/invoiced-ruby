@@ -2,6 +2,7 @@ require 'invoiced'
 require 'test/unit'
 require 'mocha/setup'
 require 'shoulda'
+require 'jwt'
 
 module Invoiced
   class InvoicedTest < Test::Unit::TestCase
@@ -259,6 +260,32 @@ module Invoiced
 
       assert_raise Invoiced::ApiError do
         client.request("POST", "/invoices")
+      end
+    end
+
+    should "generate a single sign-on token" do
+        ssoKey = '8baa4dbc338a54bbf7696eef3ee4aa2daadd61bba85fcfe8df96c7cfa227c43'
+        client = Invoiced::Client.new('API_KEY', false, ssoKey)
+        t = Time.now
+        
+        token = client.generate_sign_in_token(1234, 3600)
+        
+        decrypted = JWT.decode token, ssoKey, true, { :algorithm => 'HS256' }
+        assert_operator decrypted[0]['exp'] - t.to_i - 3600, :<, 3 # this accounts for slow running tests
+        decrypted[0].delete('exp')
+
+        expected = {
+            'iat' => t.to_i,
+            'sub' => 1234,
+            'iss' => 'Invoiced Ruby/'+Invoiced::VERSION
+        }
+        assert_equal(expected, decrypted[0])
+    end
+
+    should "raise an error when generating a single sign-on token with no key" do
+      client = Invoiced::Client.new('test')
+      assert_raise do
+        client.generate_sign_in_token(1234, 3600)
       end
     end
   end

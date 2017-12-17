@@ -41,13 +41,14 @@ module Invoiced
         OpenTimeout = 30
         ReadTimeout = 80
 
-        attr_reader :api_key, :api_url, :sandbox
+        attr_reader :api_key, :api_url, :sandbox, :sso_key
         attr_reader :CatalogItem, :CreditNote, :Customer, :Estimate, :Event, :File, :Invoice, :Plan, :Subscription, :Transaction
 
-        def initialize(api_key, sandbox=false)
+        def initialize(api_key, sandbox=false, sso_key=false)
           @api_key = api_key
           @sandbox = sandbox
           @api_url = sandbox ? ApiBaseSandbox : ApiBase
+          @sso_key = sso_key
 
           # Object endpoints
           @CatalogItem = Invoiced::CatalogItem.new(self)
@@ -94,6 +95,23 @@ module Invoiced
             end
 
             parse(response)
+        end
+
+        def generate_sign_in_token(customerId, ttl)
+            if !@sso_key
+                raise "Please provide a single sign-on key! You can find this value in Settings > Developers > Single Sign-On of the Invoiced application."
+            end
+
+            expires = Time.now + ttl # TTL should be in seconds
+
+            payload = {
+                :sub => customerId,
+                :iss => "Invoiced Ruby/#{Invoiced::VERSION}",
+                :iat => Time.now.to_i,
+                :exp => expires.to_i
+            }
+
+            JWT.encode payload, @sso_key, 'HS256'
         end
 
         private

@@ -2,6 +2,7 @@ source "https://rubygems.org"
 gemspec
 
 gem 'rest-client', '~> 2.0.0'
+gem 'jwt', '~> 2.0.0'
 
 gem 'mocha', '~> 0.13.2', :require => false, :group => :test
 gem 'shoulda', '~> 3.4.0', :require => false, :group => :test
