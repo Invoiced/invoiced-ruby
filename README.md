@@ -24,8 +24,9 @@ gem 'invoiced'
 
 ## Requirements
 
-- Ruby 2.0+
-- rest_client gem
+- Ruby 2.1+
+- `rest_client` gem
+- `jwt` gem
 
 ## Usage
 
