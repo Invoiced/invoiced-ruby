@@ -4,6 +4,8 @@ module Invoiced
     module Operations
         module Update
             def save(params={}, opts={})
+                logger = Logger.new(STDOUT)
+
                 update = {}
 
                 @unsaved.each do |k|
