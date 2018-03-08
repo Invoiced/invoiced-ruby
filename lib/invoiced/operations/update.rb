@@ -18,7 +18,7 @@ module Invoiced
                 logger.info("In invoiced gem")
                 logger.info("the params passed in = #{params.inspect}")
                 logger.info("the opts passed in = #{opts.inspect}")
-                logger.info("@unsaved = #{unsaved.inspect}")
+                logger.info("@unsaved = #{@unsaved.inspect}")
 
                 # perform the update if there are any changes
                 if update.length > 0
