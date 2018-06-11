@@ -1,4 +1,5 @@
 require 'rest-client'
+require 'jwt'
 require 'json'
 require 'base64'
 

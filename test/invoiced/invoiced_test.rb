@@ -2,7 +2,6 @@ require 'invoiced'
 require 'test/unit'
 require 'mocha/setup'
 require 'shoulda'
-require 'jwt'
 
 module Invoiced
   class InvoicedTest < Test::Unit::TestCase
