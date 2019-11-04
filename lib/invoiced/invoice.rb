@@ -66,5 +66,17 @@ module Invoiced
             paymentPlan = PaymentPlan.new(@client)
             paymentPlan.set_endpoint_base(self.endpoint())
         end
+
+        def notes()
+            note = Note.new(@client)
+            note.set_endpoint_base(self.endpoint())
+        end
+
+        def void()
+            response = @client.request(:post, "#{self.endpoint()}/void", {})
+
+            refresh_from(response[:body].dup.merge({:id => self.id}))
+
+            return response[:code] == 200
     end
 end
