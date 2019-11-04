@@ -15,6 +15,23 @@ module Invoiced
             Util.build_objects(email, response[:body])
         end
 
+        def send_sms(params={}, opts={})
+            response = @client.request(:post, "#{self.endpoint()}/text_messages", params, opts)
+
+            # build text message objects
+            text_message = TextMessage.new(@client)
+            Util.build_objects(text_message, response[:body])
+        end
+
+        def send_letter(params={}, opts={})
+            response = @client.request(:post, "#{self.endpoint()}/letters", params, opts)
+
+            # build letter objects
+
+            letter = Letter.new(@client)
+            Util.build_objects(letter, response[:body])
+        end
+
         def pay(opts={})
             response = @client.request(:post, "#{self.endpoint()}/pay", {}, opts)
 
