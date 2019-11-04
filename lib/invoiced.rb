@@ -21,6 +21,7 @@ require 'invoiced/object'
 require 'invoiced/attachment'
 require 'invoiced/catalog_item'
 require 'invoiced/contact'
+require 'invoiced/coupon'
 require 'invoiced/credit_note'
 require 'invoiced/customer'
 require 'invoiced/email'
@@ -28,10 +29,15 @@ require 'invoiced/estimate'
 require 'invoiced/event'
 require 'invoiced/file'
 require 'invoiced/invoice'
+require 'invoiced/letter'
 require 'invoiced/line_item'
+require 'invoiced/note'
 require 'invoiced/payment_plan'
 require 'invoiced/plan'
 require 'invoiced/subscription'
+require 'invoiced/task'
+require 'invoiced/tax_rate'
+require 'invoiced/text_message'
 require 'invoiced/transaction'
 
 module Invoiced
@@ -43,7 +49,7 @@ module Invoiced
         ReadTimeout = 80
 
         attr_reader :api_key, :api_url, :sandbox, :sso_key
-        attr_reader :CatalogItem, :CreditNote, :Customer, :Estimate, :Event, :File, :Invoice, :Plan, :Subscription, :Transaction
+        attr_reader :CatalogItem, :Coupon, :CreditNote, :Customer, :Estimate, :Event, :File, :Invoice, :Note, :Plan, :Subscription, :Task, :TaxRate, :Transaction
 
         def initialize(api_key, sandbox=false, sso_key=false)
           @api_key = api_key
@@ -53,14 +59,18 @@ module Invoiced
 
           # Object endpoints
           @CatalogItem = Invoiced::CatalogItem.new(self)
+          @Coupon = Invoiced::Coupon.new(self)
           @CreditNote = Invoiced::CreditNote.new(self)
           @Customer = Invoiced::Customer.new(self)
           @Estimate = Invoiced::Estimate.new(self)
           @Event = Invoiced::Event.new(self)
           @File = Invoiced::File.new(self)
           @Invoice = Invoiced::Invoice.new(self)
+          @Note = Invoiced::Note.new(self)
           @Plan = Invoiced::Plan.new(self)
           @Subscription = Invoiced::Subscription.new(self)
+          @Task = Invoiced::Task.new(self)
+          @TaxRate = Invoiced::TaxRate.new(self)
           @Transaction = Invoiced::Transaction.new(self)
         end
 
