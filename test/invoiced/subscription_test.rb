@@ -102,5 +102,3 @@ module Invoiced
     end
   end
 end
-
-('{"first_invoice": {"id": false}, "mrr": 9}')

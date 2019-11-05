@@ -220,6 +220,9 @@ module Invoiced
       assert_equal(1, notes.length)
       assert_equal(1212, notes[0].id)
       assert_equal('/invoices/1234/notes/1212', notes[0].endpoint())
+
+      assert_instance_of(Invoiced::List, metadata)
+      assert_equal(15, metadata.total_count)
     end
 
     should "void an invoice" do
