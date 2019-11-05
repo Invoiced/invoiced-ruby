@@ -21,6 +21,11 @@ module Invoiced
                 object.set_endpoint_base(_class.endpoint_base())
             end
 
+            def convert_preview_to_object(_class, values)
+                object = _class.class.new(_class.client, -1, values)
+                object.set_endpoint_base(_class.endpoint_base())
+            end
+
             private
 
             def url_encode(params)

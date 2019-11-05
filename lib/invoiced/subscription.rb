@@ -14,7 +14,7 @@ module Invoiced
         def preview(params={}, opts={})
             response = @client.request(:post, "/subscriptions/preview", params, opts)
 
-            Util.convert_to_object(self, response[:body])
+            Util.convert_preview_to_object(self, response[:body])
         end
     end
 end
