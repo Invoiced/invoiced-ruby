@@ -50,7 +50,7 @@ module Invoiced
                 if !attachment.has_key?(:id)
                     attachment[:id] = attachment[:file][:id]
                 end
-            end
+        end
 
             # build objects
             attachment = Attachment.new(@client)
@@ -78,5 +78,6 @@ module Invoiced
             refresh_from(response[:body].dup.merge({:id => self.id}))
 
             return response[:code] == 200
+        end
     end
 end

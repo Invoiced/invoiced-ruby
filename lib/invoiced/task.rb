@@ -1,4 +1,4 @@
-module Task
+module Invoiced
     class Task < Object
         include Invoiced::Operations::List
         include Invoiced::Operations::Create

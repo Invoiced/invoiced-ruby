@@ -1,4 +1,4 @@
-module TaxRate
+module Invoiced
     class TaxRate < Object
         include Invoiced::Operations::List
         include Invoiced::Operations::Create

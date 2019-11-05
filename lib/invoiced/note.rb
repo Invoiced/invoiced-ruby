@@ -1,4 +1,4 @@
-module Note
+module Invoiced
     class Note < Object
         include Invoiced::Operations::List
         include Invoiced::Operations::Create
