@@ -137,5 +137,19 @@ module Invoiced
       assert_instance_of(Invoiced::List, metadata)
       assert_equal(10, metadata.total_count)
     end
+
+    should "void an estimate" do
+      mockResponse = mock('RestClient::Response')
+      mockResponse.stubs(:code).returns(200)
+      mockResponse.stubs(:body).returns('{"id":123,"status":"voided"}')
+      mockResponse.stubs(:headers).returns({})
+
+      RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
+
+      estimate = Estimate.new(@client, 123)
+      assert_true(estimate.void)
+
+      assert_equal(estimate.status, 'voided')
+    end
   end
 end

@@ -35,5 +35,13 @@ module Invoiced
 
             return attachments, metadata
         end
+
+        def void()
+            response = @client.request(:post, "#{self.endpoint()}/void", {})
+
+            refresh_from(response[:body].dup.merge({:id => self.id}))
+
+            return response[:code] == 200
+        end
     end
 end
