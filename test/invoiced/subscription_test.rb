@@ -97,8 +97,8 @@ module Invoiced
       RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
 
       subscription = Subscription.new(@client, 123)
-      subscription = subscription.preview(:customer => 1234, :plan => "enterprise")
-      assert_equal(subscription.first_invoice, {:id=>false})
+      preview = subscription.preview(:customer => 1234, :plan => "enterprise")
+      assert_equal(preview[:first_invoice], {:id=>false})
     end
   end
 end
