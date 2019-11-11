@@ -122,5 +122,19 @@ module Invoiced
       assert_instance_of(Invoiced::List, metadata)
       assert_equal(10, metadata.total_count)
     end
+
+    should "void a credit note" do
+      mockResponse = mock('RestClient::Response')
+      mockResponse.stubs(:code).returns(200)
+      mockResponse.stubs(:body).returns('{"id":123,"status":"voided"}')
+      mockResponse.stubs(:headers).returns({})
+
+      RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
+
+      credit_note = CreditNote.new(@client, 123)
+      assert_true(credit_note.void)
+
+      assert_equal(credit_note.status, 'voided')
+    end
   end
 end

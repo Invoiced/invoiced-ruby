@@ -20,5 +20,11 @@ module Invoiced
 
             Util.convert_to_object(self, response[:body])
         end
+
+        def initiate_charge(params={}, opts={})
+            response = @client.request(:post, "/charges", params, opts)
+
+            Util.convert_to_object(self, response[:body])
+        end
     end
 end

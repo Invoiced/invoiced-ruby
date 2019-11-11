@@ -87,7 +87,7 @@ module Invoiced
       assert_true(customer.delete)
     end
 
-    should "send an account statement" do
+    should "send an account statement by email" do
       mockResponse = mock('RestClient::Response')
       mockResponse.stubs(:code).returns(201)
       mockResponse.stubs(:body).returns('[{"id":4567,"email":"test@example.com"}]')
@@ -102,6 +102,40 @@ module Invoiced
       assert_equal(1, emails.length)
       assert_instance_of(Invoiced::Email, emails[0])
       assert_equal(4567, emails[0].id)
+    end
+
+    should "send an account statement by text message" do
+      mockResponse = mock('RestClient::Response')
+      mockResponse.stubs(:code).returns(201)
+      mockResponse.stubs(:body).returns('[{"id":5678,"state":"sent"}]')
+      mockResponse.stubs(:headers).returns({})
+
+      RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
+
+      customer = Customer.new(@client, 123)
+      text_messages = customer.send_statement_sms(:type => "open_item", :message => "example")
+
+      assert_instance_of(Array, text_messages)
+      assert_equal(1, text_messages.length)
+      assert_instance_of(Invoiced::TextMessage, text_messages[0])
+      assert_equal(5678, text_messages[0].id)
+    end
+
+    should "send an account statement by letter" do
+      mockResponse = mock('RestClient::Response')
+      mockResponse.stubs(:code).returns(201)
+      mockResponse.stubs(:body).returns('[{"id":6789,"state":"queued"}]')
+      mockResponse.stubs(:headers).returns({})
+
+      RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
+
+      customer = Customer.new(@client, 123)
+      letters = customer.send_statement_letter(:type => "open_item")
+
+      assert_instance_of(Array, letters)
+      assert_equal(1, letters.length)
+      assert_instance_of(Invoiced::Letter, letters[0])
+      assert_equal(6789, letters[0].id)
     end
 
     should "retrieve a customer's balance" do
@@ -141,7 +175,7 @@ module Invoiced
       assert_equal('/customers/456/contacts/123', contact.endpoint())
     end
 
-    should "list all of the customer's contact" do
+    should "list all of the customer's contacts" do
       mockResponse = mock('RestClient::Response')
       mockResponse.stubs(:code).returns(200)
       mockResponse.stubs(:body).returns('[{"id":123,"name":"Nancy"}]')
@@ -245,6 +279,41 @@ module Invoiced
 
       assert_instance_of(Invoiced::Invoice, invoice)
       assert_equal(4567, invoice.id)
+    end
+
+    should "list all the customer's notes" do
+      mockResponse = mock('RestClient::Response')
+      mockResponse.stubs(:code).returns(200)
+      mockResponse.stubs(:body).returns('[{"id":1212,"notes":"example"}]')
+      mockResponse.stubs(:headers).returns(:x_total_count => 15, :link => '<https://api.invoiced.com/customers/123/notes?per_page=25&page=1>; rel="self", <https://api.invoiced.com/customers/123/notes?per_page=25&page=1>; rel="first", <https://api.invoiced.com/customers/123/notes?per_page=25&page=1>; rel="last"')
+
+      RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
+
+      customer = Customer.new(@client, 123)
+      notes, metadata = customer.list_notes.list
+
+      assert_instance_of(Array, notes)
+      assert_equal(1, notes.length)
+      assert_equal(1212, notes[0].id)
+      assert_equal('/customers/123/notes/1212', notes[0].endpoint())
+
+      assert_instance_of(Invoiced::List, metadata)
+      assert_equal(15, metadata.total_count)
+    end
+
+    should "create a consolidated invoice" do
+      mockResponse = mock('RestClient::Response')
+      mockResponse.stubs(:code).returns(201)
+      mockResponse.stubs(:body).returns('{"id": 999,"total":1000}')
+      mockResponse.stubs(:headers).returns({})
+
+      RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
+
+      customer = Customer.new(@client, 123)
+      invoice = customer.consolidate_invoices
+
+      assert_instance_of(Invoiced::Invoice, invoice)
+      assert_equal(invoice.id, 999)
     end
   end
 end

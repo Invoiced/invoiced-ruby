@@ -10,5 +10,11 @@ module Invoiced
         def cancel
             delete
         end
+
+        def preview(params={}, opts={})
+            response = @client.request(:post, "/subscriptions/preview", params, opts)
+
+            response[:body]
+        end
     end
 end

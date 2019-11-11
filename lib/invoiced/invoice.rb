@@ -15,6 +15,23 @@ module Invoiced
             Util.build_objects(email, response[:body])
         end
 
+        def send_sms(params={}, opts={})
+            response = @client.request(:post, "#{self.endpoint()}/text_messages", params, opts)
+
+            # build text message objects
+            text_message = TextMessage.new(@client)
+            Util.build_objects(text_message, response[:body])
+        end
+
+        def send_letter(params={}, opts={})
+            response = @client.request(:post, "#{self.endpoint()}/letters", params, opts)
+
+            # build letter objects
+
+            letter = Letter.new(@client)
+            Util.build_objects(letter, response[:body])
+        end
+
         def pay(opts={})
             response = @client.request(:post, "#{self.endpoint()}/pay", {}, opts)
 
@@ -33,7 +50,7 @@ module Invoiced
                 if !attachment.has_key?(:id)
                     attachment[:id] = attachment[:file][:id]
                 end
-            end
+        end
 
             # build objects
             attachment = Attachment.new(@client)
@@ -48,6 +65,19 @@ module Invoiced
         def payment_plan()
             paymentPlan = PaymentPlan.new(@client)
             paymentPlan.set_endpoint_base(self.endpoint())
+        end
+
+        def notes()
+            note = Note.new(@client)
+            note.set_endpoint_base(self.endpoint())
+        end
+
+        def void()
+            response = @client.request(:post, "#{self.endpoint()}/void", {})
+
+            refresh_from(response[:body].dup.merge({:id => self.id}))
+
+            return response[:code] == 200
         end
     end
 end

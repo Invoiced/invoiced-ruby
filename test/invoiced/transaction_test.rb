@@ -118,5 +118,20 @@ module Invoiced
       assert_instance_of(Invoiced::Transaction, refund)
       assert_equal(456, refund.id)
     end
+
+    should "initiate a charge" do
+      mockResponse = mock('RestClient::Response')
+      mockResponse.stubs(:code).returns(201)
+      mockResponse.stubs(:body).returns('{"id":"a1b2c3","amount":100,"object":"card"}')
+      mockResponse.stubs(:headers).returns({})
+
+      RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
+
+      transaction = Transaction.new(@client, 1234)
+      charge = transaction.initiate_charge(:amount => 100, :payment_source_type => "card")
+
+      assert_instance_of(Invoiced::Transaction, charge)
+      assert_equal(charge.id, "a1b2c3")
+    end
   end
 end
