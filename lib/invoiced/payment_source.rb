@@ -17,7 +17,7 @@ module Invoiced
             if super
                 return true
             else
-                @endpoint = '/payment_sources' + id.to_s
+                @endpoint = '/payment_sources/' + id.to_s
                 return false
             end
         end
