@@ -23,22 +23,6 @@ module Invoiced
       assert_equal("card", payment_source.object)
     end
 
-    should "retrieve a payment source" do
-      mockResponse = mock('RestClient::Response')
-      mockResponse.stubs(:code).returns(200)
-      mockResponse.stubs(:body).returns('{"id":123,"object":"card"}')
-      mockResponse.stubs(:headers).returns({})
-
-      RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
-
-      payment_source = PaymentSource.new(@client)
-      payment_source = payment_source.retrieve(123)
-
-      assert_instance_of(Invoiced::PaymentSource, payment_source)
-      assert_equal(123, payment_source.id)
-      assert_equal("card", payment_source.object)
-    end
-
     should "list all payment sources" do
       mockResponse = mock('RestClient::Response')
       mockResponse.stubs(:code).returns(200)
