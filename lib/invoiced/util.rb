@@ -12,13 +12,20 @@ module Invoiced
 
             def build_objects(_class, objects)
                 objects.map {
-                    |object| convert_to_object(_class, object)
+                    |object| convert_to_object(_class.client, _class, object)
                 }
             end
 
-            def convert_to_object(_class, values)
-                object = _class.class.new(_class.client, values[:id], values)
-                object.set_endpoint_base(_class.endpoint_base())
+            def convert_to_object(client, _class, values, base_link=nil)
+                unless base_link.nil?
+                    object = _class.new(client, values[:id], values)
+                    object.set_endpoint_base(base_link.endpoint_base())
+                else
+                    object = _class.class.new(client, values[:id], values)
+                    object.set_endpoint_base(_class.endpoint_base())
+                end
+
+                object
             end
 
             private

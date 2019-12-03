@@ -27,7 +27,7 @@ module Invoiced
 
     should "create a Customer object" do
       instance = Invoiced::Customer.new(@client)
-      customer = Util.convert_to_object(instance, {:id => 100})
+      customer = Util.convert_to_object(instance.client, instance, {:id => 100})
       assert_equal('Invoiced::Customer', customer.class.name)
       assert_equal(100, customer.id)
     end
