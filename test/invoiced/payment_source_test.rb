@@ -51,6 +51,8 @@ module Invoiced
       payment_sources, metadata = payment_source.list
 
       assert_instance_of(Array, payment_sources)
+      assert_instance_of(Invoiced::Card, payment_sources[0])
+      assert_instance_of(Invoiced::BankAccount, payment_sources[1])
       assert_equal(2, payment_sources.length)
       assert_equal(123, payment_sources[0][:id])
 
