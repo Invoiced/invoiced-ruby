@@ -16,6 +16,12 @@ module Invoiced
                 }
             end
 
+            # arguments:
+            # client = client property of calling object
+            # _class = class of object to convert into
+            #   (has to be decoupled from `self` due to PaymentSource class)
+            # values = hash of values to populate object with
+            # base_link = if supplied, will set endpoint base to that of object called
             def convert_to_object(client, _class, values, base_link=nil)
                 unless base_link.nil?
                     object = _class.new(client, values[:id], values)
