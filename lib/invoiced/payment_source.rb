@@ -12,10 +12,10 @@ module Invoiced
 
       response[:body].each do |obj|
         if obj[:object] == 'card'
-          output.append(Util.convert_to_object(@client, Invoiced::Card, obj, self))
+          output.push(Util.convert_to_object(@client, Invoiced::Card, obj, self))
         end
         if obj[:object] == 'bank_account'
-          output.append(Util.convert_to_object(@client, Invoiced::BankAccount, obj, self))
+          output.push(Util.convert_to_object(@client, Invoiced::BankAccount, obj, self))
         end
       end
 
