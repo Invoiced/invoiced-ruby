@@ -48,7 +48,7 @@ module Invoiced
 
             response = @client.request(:get, "#{endpoint()}/#{id}", params)
 
-            Util.convert_to_object(client, self, response[:body])
+            Util.convert_to_object(self, response[:body])
         end
 
         def to_s(*args)

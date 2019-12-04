@@ -18,13 +18,13 @@ module Invoiced
         def refund(params={}, opts={})
             response = @client.request(:post, "#{self.endpoint()}/refunds", params, opts)
 
-            Util.convert_to_object(client, self, response[:body])
+            Util.convert_to_object(self, response[:body])
         end
 
         def initiate_charge(params={}, opts={})
             response = @client.request(:post, "/charges", params, opts)
 
-            Util.convert_to_object(client, self, response[:body])
+            Util.convert_to_object(self, response[:body])
         end
     end
 end

@@ -12,13 +12,13 @@ module Invoiced
         def create(params={}, opts={})
             response = @client.request(:put, self.endpoint(), params, opts)
 
-            Util.convert_to_object(client, self, response[:body])
+            Util.convert_to_object(self, response[:body])
         end
 
         def retrieve(params={})
             response = @client.request(:get, self.endpoint(), params)
 
-            Util.convert_to_object(client, self, response[:body])
+            Util.convert_to_object(self, response[:body])
         end
 
         def cancel

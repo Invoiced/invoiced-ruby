@@ -12,10 +12,10 @@ module Invoiced
 
       response[:body].each do |obj|
         if obj[:object] == 'card'
-          output.push(Util.convert_to_object(@client, Invoiced::Card, obj, self))
+          output.push(Util.convert_to_object(Invoiced::Card, obj, self))
         end
         if obj[:object] == 'bank_account'
-          output.push(Util.convert_to_object(@client, Invoiced::BankAccount, obj, self))
+          output.push(Util.convert_to_object(Invoiced::BankAccount, obj, self))
         end
       end
 
@@ -37,10 +37,12 @@ module Invoiced
 
       # change endpoint just for this operation
       @endpoint = '/payment_sources'
-      output = super
-      @endpoint = '/bank_accounts'
-
-      @endpoint = @endpoint + '/' + @id.to_s if @id
+      begin
+        output = super
+      ensure
+        @endpoint = '/bank_accounts'
+        @endpoint = @endpoint + '/' + @id.to_s if @id
+      end
 
       output
     end
@@ -57,10 +59,12 @@ module Invoiced
 
       # change endpoint just for this operation
       @endpoint = '/payment_sources'
-      output = super
-      @endpoint = '/cards'
-
-      @endpoint = @endpoint + '/' + @id.to_s if @id
+      begin
+        output = super
+      ensure
+        @endpoint = '/cards'
+        @endpoint = @endpoint + '/' + @id.to_s if @id
+      end
 
       output
     end

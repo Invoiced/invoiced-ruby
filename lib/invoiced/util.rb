@@ -12,23 +12,19 @@ module Invoiced
 
             def build_objects(_class, objects)
                 objects.map {
-                    |object| convert_to_object(_class.client, _class, object)
+                    |object| convert_to_object(_class, object)
                 }
             end
 
-            # arguments:
-            # client = client property of calling object
-            # _class = class of object to convert into
-            #   (has to be decoupled from `self` due to PaymentSource class)
-            # values = hash of values to populate object with
-            # base_link = if supplied, will set endpoint base to that of object called
-            def convert_to_object(client, _class, values, base_link=nil)
-                unless base_link.nil?
-                    object = _class.new(client, values[:id], values)
-                    object.set_endpoint_base(base_link.endpoint_base())
-                else
-                    object = _class.class.new(client, values[:id], values)
+            # if base_link is specified, it is used to grab the proper client and endpoint base
+            # else client and endpoint base are grabbed from object passed as _class
+            def convert_to_object(_class, values, base_link=nil)
+                if base_link.nil?
+                    object = _class.class.new(_class.client, values[:id], values)
                     object.set_endpoint_base(_class.endpoint_base())
+                else
+                    object = _class.new(base_link.client, values[:id], values)
+                    object.set_endpoint_base(base_link.endpoint_base())
                 end
 
                 object

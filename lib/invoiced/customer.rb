@@ -62,7 +62,7 @@ module Invoiced
 
             # build invoice object
             invoice = Invoice.new(@client)
-            Util.convert_to_object(client, invoice, response[:body])
+            Util.convert_to_object(invoice, response[:body])
         end
 
         def consolidate_invoices(params={})
@@ -70,7 +70,7 @@ module Invoiced
 
             # build invoice object
             invoice = Invoice.new(@client)
-            Util.convert_to_object(client, invoice, response[:body])
+            Util.convert_to_object(invoice, response[:body])
         end
     end
 end
