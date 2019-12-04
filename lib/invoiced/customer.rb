@@ -47,6 +47,16 @@ module Invoiced
             source.set_endpoint_base(self.endpoint())
         end
 
+        def bank_accounts()
+            bank_account = BankAccount.new(@client)
+            bank_account.set_endpoint_base(self.endpoint())
+        end
+
+        def cards()
+            card = Card.new(@client)
+            card.set_endpoint_base(self.endpoint())
+        end
+
         def line_items()
             line = LineItem.new(@client)
             line.set_endpoint_base(self.endpoint())
