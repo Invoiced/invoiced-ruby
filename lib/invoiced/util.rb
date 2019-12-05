@@ -16,18 +16,25 @@ module Invoiced
                 }
             end
 
-            # if base_link is specified, it is used to grab the proper client and endpoint base
-            # else client and endpoint base are grabbed from object passed as _class
-            def convert_to_object(_class, values, base_link=nil)
-                if base_link.nil?
-                    object = _class.class.new(_class.client, values[:id], values)
-                    object.set_endpoint_base(_class.endpoint_base())
-                else
-                    object = _class.new(base_link.client, values[:id], values)
-                    object.set_endpoint_base(base_link.endpoint_base())
+            def convert_to_object(_class, values)
+                class_override = nil
+
+                # check for PaymentSource special case where class must be forced to Card or BankAccount
+                unless values[:object].nil?
+                    if values[:object] == 'card'
+                        class_override = Invoiced::Card
+                    elsif values[:object] == 'bank_account'
+                        class_override = Invoiced::BankAccount
+                    end
                 end
 
-                object
+                object = if class_override.nil?
+                             _class.class.new(_class.client, values[:id], values)
+                         else
+                             class_override.new(_class.client, values[:id], values)
+                         end
+
+                object.set_endpoint_base(_class.endpoint_base())
             end
 
             private

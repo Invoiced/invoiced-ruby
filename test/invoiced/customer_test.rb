@@ -325,7 +325,7 @@ module Invoiced
       RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
 
       customer = Customer.new(@client, 123)
-      account = customer.bank_accounts.create
+      account = customer.payment_sources.create
 
       assert_instance_of(Invoiced::BankAccount, account)
       assert_equal(account.endpoint, "/customers/123/bank_accounts/999")
@@ -340,7 +340,7 @@ module Invoiced
       RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
 
       customer = Customer.new(@client, 123)
-      card = customer.cards.create
+      card = customer.payment_sources.create
 
       assert_instance_of(Invoiced::Card, card)
       assert_equal(card.endpoint, "/customers/123/cards/888")

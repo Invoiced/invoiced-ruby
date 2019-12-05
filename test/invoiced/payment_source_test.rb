@@ -7,38 +7,6 @@ module Invoiced
       assert_equal('/customers/1234/payment_sources', payment_source.endpoint())
     end
 
-    should "create a bank account payment source" do
-      mockResponse = mock('RestClient::Response')
-      mockResponse.stubs(:code).returns(201)
-      mockResponse.stubs(:body).returns('{"id":234,"object":"bank_account"}')
-      mockResponse.stubs(:headers).returns({})
-
-      RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
-
-      bank_account = BankAccount.new(@client)
-      bank_account = bank_account.create
-
-      assert_instance_of(Invoiced::BankAccount, bank_account)
-      assert_equal(234, bank_account.id)
-      assert_equal("bank_account", bank_account.object)
-    end
-
-    should "create a card payment source" do
-      mockResponse = mock('RestClient::Response')
-      mockResponse.stubs(:code).returns(201)
-      mockResponse.stubs(:body).returns('{"id":123,"object":"card"}')
-      mockResponse.stubs(:headers).returns({})
-
-      RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
-
-      card = Card.new(@client)
-      card = card.create
-
-      assert_instance_of(Invoiced::Card, card)
-      assert_equal(123, card.id)
-      assert_equal("card", card.object)
-    end
-
     should "list all payment sources" do
       mockResponse = mock('RestClient::Response')
       mockResponse.stubs(:code).returns(200)
