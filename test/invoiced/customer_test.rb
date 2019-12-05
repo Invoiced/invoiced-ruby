@@ -315,5 +315,35 @@ module Invoiced
       assert_instance_of(Invoiced::Invoice, invoice)
       assert_equal(invoice.id, 999)
     end
+
+    should "create a bank account associated with customer" do
+      mockResponse = mock('RestClient::Response')
+      mockResponse.stubs(:code).returns(201)
+      mockResponse.stubs(:body).returns('{"id": 999,"object":"bank_account"}')
+      mockResponse.stubs(:headers).returns({})
+
+      RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
+
+      customer = Customer.new(@client, 123)
+      account = customer.payment_sources.create
+
+      assert_instance_of(Invoiced::BankAccount, account)
+      assert_equal(account.endpoint, "/customers/123/bank_accounts/999")
+    end
+
+    should "create a card associated with customer" do
+      mockResponse = mock('RestClient::Response')
+      mockResponse.stubs(:code).returns(201)
+      mockResponse.stubs(:body).returns('{"id": 888,"object":"card"}')
+      mockResponse.stubs(:headers).returns({})
+
+      RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
+
+      customer = Customer.new(@client, 123)
+      card = customer.payment_sources.create
+
+      assert_instance_of(Invoiced::Card, card)
+      assert_equal(card.endpoint, "/customers/123/cards/888")
+    end
   end
 end

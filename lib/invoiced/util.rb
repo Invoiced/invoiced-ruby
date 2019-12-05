@@ -17,7 +17,19 @@ module Invoiced
             end
 
             def convert_to_object(_class, values)
-                object = _class.class.new(_class.client, values[:id], values)
+                object_class = _class.class
+
+                # check for PaymentSource special case where class must be forced to Card or BankAccount
+                unless values[:object].nil?
+                    if values[:object] == 'card'
+                        object_class = Invoiced::Card
+                    elsif values[:object] == 'bank_account'
+                        object_class = Invoiced::BankAccount
+                    end
+                end
+
+                object = object_class.new(_class.client, values[:id], values)
+
                 object.set_endpoint_base(_class.endpoint_base())
             end
 

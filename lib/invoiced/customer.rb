@@ -42,6 +42,11 @@ module Invoiced
             contact.set_endpoint_base(self.endpoint())
         end
 
+        def payment_sources()
+            source = PaymentSource.new(@client)
+            source.set_endpoint_base(self.endpoint())
+        end
+
         def line_items()
             line = LineItem.new(@client)
             line.set_endpoint_base(self.endpoint())

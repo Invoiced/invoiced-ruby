@@ -46,7 +46,7 @@ module Invoiced
                 raise ArgumentError.new("Missing ID.")
             end
 
-            response = @client.request(:get, "#{self.endpoint()}/#{id}", params)
+            response = @client.request(:get, "#{endpoint()}/#{id}", params)
 
             Util.convert_to_object(self, response[:body])
         end
@@ -57,7 +57,7 @@ module Invoiced
 
         def inspect
             id_string = (!@id.nil?) ? " id=#{@id}" : ""
-            "#<#{self.class}:0x#{self.object_id.to_s(16)}#{id_string}> JSON: " + JSON.pretty_generate(@values)
+            "#<#{self.class}:0x#{object_id.to_s(16)}#{id_string}> JSON: " + JSON.pretty_generate(@values)
         end
 
         def refresh_from(values)

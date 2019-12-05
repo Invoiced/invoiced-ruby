@@ -122,7 +122,7 @@ module Invoiced
     should "initiate a charge" do
       mockResponse = mock('RestClient::Response')
       mockResponse.stubs(:code).returns(201)
-      mockResponse.stubs(:body).returns('{"id":"a1b2c3","amount":100,"object":"card"}')
+      mockResponse.stubs(:body).returns('{"id":"a1b2c3","amount":100,"object":"charge"}')
       mockResponse.stubs(:headers).returns({})
 
       RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
