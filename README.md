@@ -5,6 +5,7 @@ This repository contains the Ruby client library for the [Invoiced](https://invo
 
 [![Build Status](https://travis-ci.org/Invoiced/invoiced-ruby.svg?branch=master)](https://travis-ci.org/Invoiced/invoiced-ruby)
 [![Coverage Status](https://coveralls.io/repos/Invoiced/invoiced-ruby/badge.svg?branch=master&service=github)](https://coveralls.io/github/Invoiced/invoiced-ruby?branch=master)
+[![Gem Version](https://badge.fury.io/rb/invoiced.svg)](https://badge.fury.io/rb/invoiced)
 
 ## Installing
 
