@@ -18,7 +18,7 @@ module Invoiced
       charge = Charge.new(@client, 1234)
       charge = charge.create(:amount => 100, :payment_source_type => "card")
 
-      assert_instance_of(Invoiced::Charge, charge)
+      assert_instance_of(Invoiced::Payment, charge)
       assert_equal(charge.id, "a1b2c3")
     end
   end
