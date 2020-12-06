@@ -45,10 +45,16 @@ Then, API calls can be made like this:
 invoice = invoiced.Invoice.retrieve("{INVOICE_ID}")
 
 # mark as paid
-transaction = invoiced.Transaction.create(
-    :invoice => invoice.id,
+payment = invoiced.Payment.create(
     :amount => invoice.balance,
-    :method => "check")
+    :method => "check",
+    :applied_to => [
+        {
+            :type => "invoice",
+            :invoice => invoice.id,
+            :amount => invoice.balance
+        }
+    ])
 ```
 
 If you want to use the sandbox API instead then you must set the second argument on the client to `true` like this:
