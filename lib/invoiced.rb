@@ -22,7 +22,7 @@ require 'invoiced/payment_source_object'
 require 'invoiced/attachment'
 require 'invoiced/bank_account'
 require 'invoiced/card'
-require 'invoiced/catalog_item'
+require 'invoiced/item'
 require 'invoiced/charge'
 require 'invoiced/contact'
 require 'invoiced/coupon'
@@ -56,7 +56,7 @@ module Invoiced
         ReadTimeout = 80
 
         attr_reader :api_key, :api_url, :sandbox, :sso_key
-        attr_reader :CatalogItem, :Charge, :Coupon, :CreditNote, :Customer, :Estimate, :Event, :File, :Invoice, :Note, :Payment, :Plan, :Refund, :Subscription, :Task, :TaxRate, :Transaction
+        attr_reader :Item, :Charge, :Coupon, :CreditNote, :Customer, :Estimate, :Event, :File, :Invoice, :Note, :Payment, :Plan, :Refund, :Subscription, :Task, :TaxRate, :Transaction
 
         def initialize(api_key, sandbox=false, sso_key=false)
           @api_key = api_key
@@ -65,7 +65,7 @@ module Invoiced
           @sso_key = sso_key
 
           # Object endpoints
-          @CatalogItem = Invoiced::CatalogItem.new(self)
+          @Item = Invoiced::Item.new(self)
           @Charge = Invoiced::Charge.new(self)
           @Coupon = Invoiced::Coupon.new(self)
           @CreditNote = Invoiced::CreditNote.new(self)
