@@ -45,7 +45,6 @@ require 'invoiced/subscription'
 require 'invoiced/task'
 require 'invoiced/tax_rate'
 require 'invoiced/text_message'
-require 'invoiced/transaction'
 
 module Invoiced
     class Client
@@ -56,7 +55,7 @@ module Invoiced
         ReadTimeout = 80
 
         attr_reader :api_key, :api_url, :sandbox, :sso_key
-        attr_reader :Item, :Charge, :Coupon, :CreditNote, :Customer, :Estimate, :Event, :File, :Invoice, :Note, :Payment, :Plan, :Refund, :Subscription, :Task, :TaxRate, :Transaction
+        attr_reader :Item, :Charge, :Coupon, :CreditNote, :Customer, :Estimate, :Event, :File, :Invoice, :Note, :Payment, :Plan, :Refund, :Subscription, :Task, :TaxRate
 
         def initialize(api_key, sandbox=false, sso_key=false)
           @api_key = api_key
@@ -81,7 +80,6 @@ module Invoiced
           @Subscription = Invoiced::Subscription.new(self)
           @Task = Invoiced::Task.new(self)
           @TaxRate = Invoiced::TaxRate.new(self)
-          @Transaction = Invoiced::Transaction.new(self)
         end
 
         def request(method, endpoint, params={}, opts={})
