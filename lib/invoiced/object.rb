@@ -35,7 +35,11 @@ module Invoiced
 
         def build_endpoint
             if self.class.const_defined? "OBJECT_NAME"
-                '/' + self.class::OBJECT_NAME + 's'
+                if self.class::OBJECT_NAME == 'inbox'
+                    '/inboxes'
+                else
+                    '/' + self.class::OBJECT_NAME + 's'
+                end
             else
                 '/objects'
             end
