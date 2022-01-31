@@ -2,6 +2,13 @@ require File.expand_path('../../test_helper', __FILE__)
 
 module Invoiced
   class PaymentPlanTest < Test::Unit::TestCase
+    include Invoiced::Operations::CreateTest
+    include Invoiced::Operations::DeleteTest
+
+    setup do
+      @objectClass = PaymentPlan
+    end
+
     should "return the api endpoint" do
       paymentPlan = PaymentPlan.new(@client, 123)
       assert_equal('/payment_plan', paymentPlan.endpoint())

@@ -14,6 +14,12 @@ require 'invoiced'
 require 'test/unit'
 require 'mocha/setup'
 require 'shoulda'
+require 'invoiced/operations/list_test'
+require 'invoiced/operations/create_test'
+require 'invoiced/operations/endpoint_test'
+require 'invoiced/operations/update_test'
+require 'invoiced/operations/delete_test'
+require 'invoiced/operations/retrieve_test'
 
 class Test::Unit::TestCase
   include Mocha
