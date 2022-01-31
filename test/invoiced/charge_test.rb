@@ -2,9 +2,11 @@ require File.expand_path('../../test_helper', __FILE__)
 
 module Invoiced
   class ChargeTest < Test::Unit::TestCase
-    should "return the api endpoint" do
-      charge = Charge.new(@client, 123)
-      assert_equal('/charges/123', charge.endpoint())
+    include Invoiced::Operations::EndpointTest
+
+    setup do
+      @objectClass = Charge
+      @endpoint = '/charges'
     end
 
     should "create a charge" do
@@ -16,10 +18,10 @@ module Invoiced
       RestClient::Request.any_instance.expects(:execute).returns(mockResponse)
 
       charge = Charge.new(@client, 1234)
-      charge = charge.create(:amount => 100, :payment_source_type => "card")
+      payment = charge.create(:amount => 100, :payment_source_type => "card")
 
-      assert_instance_of(Invoiced::Payment, charge)
-      assert_equal(charge.id, "a1b2c3")
+      assert_instance_of(Invoiced::Payment, payment)
+      assert_equal(payment.id, "a1b2c3")
     end
   end
 end

@@ -2,9 +2,11 @@ require File.expand_path('../../test_helper', __FILE__)
 
 module Invoiced
   class RefundTest < Test::Unit::TestCase
-    should "return the api endpoint" do
-      refund = Refund.new(@client, 123)
-      assert_equal('/refunds/123', refund.endpoint())
+    include Invoiced::Operations::EndpointTest
+
+    setup do
+      @objectClass = Refund
+      @endpoint = '/refunds'
     end
 
     should "create a refund" do
