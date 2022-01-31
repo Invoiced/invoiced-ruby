@@ -74,3 +74,12 @@ gem build invoiced.gemspec
 ```
 
 The test suite can be ran with `rake test`
+
+## Deploying
+
+The package can be uploaded to pypi with the following commands:
+
+```
+gem build invoiced.gemspec
+gem push invoiced-X.Y.Z.gem
+```
