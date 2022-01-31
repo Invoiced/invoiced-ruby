@@ -19,6 +19,7 @@ require 'invoiced/operations/update'
 
 require 'invoiced/object'
 require 'invoiced/payment_source_object'
+
 require 'invoiced/attachment'
 require 'invoiced/bank_account'
 require 'invoiced/card'
@@ -27,25 +28,43 @@ require 'invoiced/contact'
 require 'invoiced/coupon'
 require 'invoiced/credit_balance_adjustment'
 require 'invoiced/credit_note'
+require 'invoiced/custom_field'
 require 'invoiced/customer'
+require 'invoiced/customer_chasing_cadence'
 require 'invoiced/email'
+require 'invoiced/email_template'
 require 'invoiced/estimate'
 require 'invoiced/event'
 require 'invoiced/file'
+require 'invoiced/gl_account'
+require 'invoiced/inbox'
 require 'invoiced/invoice'
+require 'invoiced/invoice_chasing_cadence'
 require 'invoiced/item'
+require 'invoiced/late_fee_schedule'
 require 'invoiced/letter'
 require 'invoiced/line_item'
+require 'invoiced/member'
+require 'invoiced/merchant_account'
 require 'invoiced/note'
 require 'invoiced/payment'
+require 'invoiced/payment_method'
 require 'invoiced/payment_plan'
 require 'invoiced/payment_source'
+require 'invoiced/pdf_template'
 require 'invoiced/plan'
 require 'invoiced/refund'
+require 'invoiced/report'
+require 'invoiced/role'
+require 'invoiced/sign_up_page'
+require 'invoiced/sms_template'
 require 'invoiced/subscription'
 require 'invoiced/task'
 require 'invoiced/tax_rate'
+require 'invoiced/tax_rule'
 require 'invoiced/text_message'
+require 'invoiced/theme'
+require 'invoiced/webhook'
 
 module Invoiced
     class Client
@@ -56,7 +75,7 @@ module Invoiced
         ReadTimeout = 80
 
         attr_reader :api_key, :api_url, :sandbox, :sso_key
-        attr_reader :Item, :Charge, :Coupon, :CreditBalanceAdjustment, :CreditNote, :Customer, :Estimate, :Event, :File, :Invoice, :Note, :Payment, :Plan, :Refund, :Subscription, :Task, :TaxRate
+        attr_reader :Charge, :Coupon, :CreditBalanceAdjustment, :CreditNote, :CustomField, :Customer, :CustomerChasingCadence, :EmailTemplate, :Estimate, :Event, :File, :GlAccount, :Inbox, :Invoice, :InvoiceChasingCadence, :Item, :LateFeeSchedule, :Member, :MerchantAccount, :Note, :Payment, :PaymentMethod, :PdfTemplate, :Plan, :Refund, :Report, :Role, :SignUpPage, :SmsTemplate, :Subscription, :Task, :TaxRate, :TaxRule, :Theme, :Webhook
 
         def initialize(api_key, sandbox=false, sso_key=false)
           @api_key = api_key
@@ -65,23 +84,41 @@ module Invoiced
           @sso_key = sso_key
 
           # Object endpoints
-          @Item = Invoiced::Item.new(self)
           @Charge = Invoiced::Charge.new(self)
           @Coupon = Invoiced::Coupon.new(self)
           @CreditBalanceAdjustment = Invoiced::CreditBalanceAdjustment.new(self)
           @CreditNote = Invoiced::CreditNote.new(self)
+          @CustomField = Invoiced::CustomField.new(self)
           @Customer = Invoiced::Customer.new(self)
+          @CustomerChasingCadence = Invoiced::CustomerChasingCadence.new(self)
+          @EmailTemplate = Invoiced::EmailTemplate.new(self)
           @Estimate = Invoiced::Estimate.new(self)
           @Event = Invoiced::Event.new(self)
           @File = Invoiced::File.new(self)
+          @GlAccount = Invoiced::GlAccount.new(self)
+          @Inbox = Invoiced::Inbox.new(self)
           @Invoice = Invoiced::Invoice.new(self)
+          @InvoiceChasingCadence = Invoiced::InvoiceChasingCadence.new(self)
+          @Item = Invoiced::Item.new(self)
+          @LateFeeSchedule = Invoiced::LateFeeSchedule.new(self)
+          @Member = Invoiced::Member.new(self)
+          @MerchantAccount = Invoiced::MerchantAccount.new(self)
           @Note = Invoiced::Note.new(self)
           @Payment = Invoiced::Payment.new(self)
+          @PaymentMethod = Invoiced::PaymentMethod.new(self)
+          @PdfTemplate = Invoiced::PdfTemplate.new(self)
           @Plan = Invoiced::Plan.new(self)
           @Refund = Invoiced::Refund.new(self)
+          @Report = Invoiced::Report.new(self)
+          @Role = Invoiced::Role.new(self)
+          @SignUpPage = Invoiced::SignUpPage.new(self)
+          @SmsTemplate = Invoiced::SmsTemplate.new(self)
           @Subscription = Invoiced::Subscription.new(self)
           @Task = Invoiced::Task.new(self)
           @TaxRate = Invoiced::TaxRate.new(self)
+          @TaxRule = Invoiced::TaxRule.new(self)
+          @Theme = Invoiced::Theme.new(self)
+          @Webhook = Invoiced::Webhook.new(self)
         end
 
         def request(method, endpoint, params={}, opts={})
