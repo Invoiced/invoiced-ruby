@@ -3,7 +3,7 @@ invoiced-ruby
 
 This repository contains the Ruby client library for the [Invoiced](https://invoiced.com) API.
 
-[![CI](https://github.com/Invoiced/invoiced-php/actions/workflows/ci.yml/badge.svg)](https://github.com/Invoiced/invoiced-php/actions/workflows/ci.yml)
+[![CI](https://github.com/Invoiced/invoiced-ruby/actions/workflows/ci.yml/badge.svg)](https://github.com/Invoiced/invoiced-ruby/actions/workflows/ci.yml)
 [![Coverage Status](https://coveralls.io/repos/Invoiced/invoiced-ruby/badge.svg?branch=master&service=github)](https://coveralls.io/github/Invoiced/invoiced-ruby?branch=master)
 [![Gem Version](https://badge.fury.io/rb/invoiced.svg)](https://badge.fury.io/rb/invoiced)
 
